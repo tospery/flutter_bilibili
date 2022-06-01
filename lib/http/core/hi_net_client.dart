@@ -1,11 +1,12 @@
 import 'package:flutter_bilibili/http/request/base_request.dart';
 
-class HiNet {
-  HiNet._();
+class HiNetClient {
+  HiNetClient._();
 
-  static final HiNet _instance = HiNet._();
-  static HiNet getInstance() {
-    return _instance;
+  static HiNetClient? _instance;
+  static HiNetClient getInstance() {
+    _instance ??= HiNetClient._();
+    return _instance!;
   }
 
   Future fire(BaseRequest request) async {

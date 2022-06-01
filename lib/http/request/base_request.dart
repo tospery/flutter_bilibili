@@ -1,11 +1,11 @@
-enum HttpMethod { get, post, delete }
+enum HTTPMethod { get, post, delete }
 
 abstract class BaseRequest {
   var useHttps = true;
   var parameters = <String, String>{};
   var header = <String, dynamic>{};
 
-  HttpMethod httpMethod();
+  HTTPMethod httpMethod();
   String path();
   bool needLogin();
 
