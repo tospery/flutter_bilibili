@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bilibili/http/core/http_client.dart';
-import 'package:flutter_bilibili/http/request/test_request.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,14 +48,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final int _counter = 0;
+  int _counter = 0;
 
-  void _incrementCounter() async {
-    TestRequest request = TestRequest();
-    request.add('aa', 'bb').add('bb', '123');
-    var result = HiNetClient.getInstance().fire(request);
-    // ignore: avoid_print
-    print(result);
+  void _incrementCounter() {
+    setState(() {
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
+    });
   }
 
   @override
