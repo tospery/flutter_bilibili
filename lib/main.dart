@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _incrementCounter() async {
     TestRequest request = TestRequest();
-    request.add('aa', 'abc').add('bb', '123');
+    request.add('aa', 'abc').add('bb', '123').add('requestPrams', 'kkkk');
     try {
       // ignore: unused_local_variable
       var result = await HiNet.getInstance().fire(request);

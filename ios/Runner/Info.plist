@@ -45,5 +45,7 @@
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSLocalizedDescription</key>
+	<string>使用推送服务</string>
 </dict>
 </plist>
