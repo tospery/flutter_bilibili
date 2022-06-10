@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bilibili/http/core/hi_error.dart';
 import 'package:flutter_bilibili/http/core/hi_net.dart';
 import 'package:flutter_bilibili/http/request/test_request.dart';
 
@@ -52,12 +53,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final int _counter = 0;
 
-  void _incrementCounter() {
+  Future<void> _incrementCounter() async {
     TestRequest request = TestRequest();
     request.add('aa', 'abc').add('bb', '123');
-    var result = HiNet.getInstance().fire(request);
-    // ignore: avoid_print
-    print(result);
+    try {
+      var result = await HiNet.getInstance().fire(request);
+    } on NeedAuth catch(e) {
+      print(e);
+    } on NeedLogin catch(e) {
+      print(e);
+    } on HiNetError catch(e) {
+      print(e);
+    }
   }
 
   @override
