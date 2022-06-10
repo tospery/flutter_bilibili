@@ -57,12 +57,16 @@ class _MyHomePageState extends State<MyHomePage> {
     TestRequest request = TestRequest();
     request.add('aa', 'abc').add('bb', '123');
     try {
+      // ignore: unused_local_variable
       var result = await HiNet.getInstance().fire(request);
     } on NeedAuth catch(e) {
+      // ignore: avoid_print
       print(e);
     } on NeedLogin catch(e) {
+      // ignore: avoid_print
       print(e);
     } on HiNetError catch(e) {
+      // ignore: avoid_print
       print(e);
     }
   }

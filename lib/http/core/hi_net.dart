@@ -1,6 +1,6 @@
+import 'package:flutter_bilibili/http/core/dio_adapter.dart';
 import 'package:flutter_bilibili/http/core/hi_error.dart';
 import 'package:flutter_bilibili/http/core/hi_net_adapter.dart';
-import 'package:flutter_bilibili/http/core/mock_adapter.dart';
 import 'package:flutter_bilibili/http/request/base_request.dart';
 
 class HiNet {
@@ -47,7 +47,7 @@ class HiNet {
 
   Future<dynamic> send(BaseRequest request) async {
     printLog('url: ${request.urlString()}');
-    HiNetAdapter adapter = MockAdapter();
+    HiNetAdapter adapter = DioAdapter();
     return adapter.send(request);
   }
 
