@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bilibili/http/core/hi_error.dart';
 import 'package:flutter_bilibili/http/core/hi_net.dart';
@@ -53,22 +55,44 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final int _counter = 0;
 
+  // void test() {
+  //   const jsonString =
+  //       "{ \"name\": \"flutter\", \"url\": \"https://coding.imooc.com/class/487.html\" }";
+  //   //json 转map
+  //   Map<String, dynamic> jsonMap = jsonDecode(jsonString);
+  //   print('name:${jsonMap['name']}');
+  //   print('url:${jsonMap['url']}');
+  //   //map 转json
+  //   String json = jsonEncode(jsonMap);
+  //   print('json:$json');
+  // }
+
+  void test() {
+    const jsonString = "{ \"name\": \"flutter\", \"url\": \"https://coding.imooc.com/class/487.html\" }";
+    Map<String, dynamic> jsonMap = jsonDecode(jsonString);
+    print('name = ${jsonMap['name']}');
+    print('url = ${jsonMap['url']}');
+    String string = jsonEncode(jsonMap);
+    print('json = $string');
+  }
+
   Future<void> _incrementCounter() async {
-    TestRequest request = TestRequest();
-    request.add('aa', 'abc').add('bb', '123').add('requestPrams', 'kkkk');
-    try {
-      // ignore: unused_local_variable
-      var result = await HiNet.getInstance().fire(request);
-    } on NeedAuth catch(e) {
-      // ignore: avoid_print
-      print(e);
-    } on NeedLogin catch(e) {
-      // ignore: avoid_print
-      print(e);
-    } on HiNetError catch(e) {
-      // ignore: avoid_print
-      print(e);
-    }
+    test();
+    // TestRequest request = TestRequest();
+    // request.add('aa', 'abc').add('bb', '123').add('requestPrams', 'kkkk');
+    // try {
+    //   // ignore: unused_local_variable
+    //   var result = await HiNet.getInstance().fire(request);
+    // } on NeedAuth catch(e) {
+    //   // ignore: avoid_print
+    //   print(e);
+    // } on NeedLogin catch(e) {
+    //   // ignore: avoid_print
+    //   print(e);
+    // } on HiNetError catch(e) {
+    //   // ignore: avoid_print
+    //   print(e);
+    // }
   }
 
   @override
