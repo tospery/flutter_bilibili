@@ -1,9 +1,9 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bilibili/http/core/hi_error.dart';
-import 'package:flutter_bilibili/http/core/hi_net.dart';
-import 'package:flutter_bilibili/http/request/test_request.dart';
+import 'package:flutter_bilibili/db/hi_cache.dart';
+// import 'package:flutter_bilibili/http/core/hi_error.dart';
+// import 'package:flutter_bilibili/http/core/hi_net.dart';
+// import 'package:flutter_bilibili/http/request/test_request.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,6 +55,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final int _counter = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    HiCache.preInit();
+  } 
+
   // void test() {
   //   const jsonString =
   //       "{ \"name\": \"flutter\", \"url\": \"https://coding.imooc.com/class/487.html\" }";
@@ -67,17 +73,19 @@ class _MyHomePageState extends State<MyHomePage> {
   //   print('json:$json');
   // }
 
-  void test() {
-    const jsonString = "{ \"name\": \"flutter\", \"url\": \"https://coding.imooc.com/class/487.html\" }";
-    Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-    print('name = ${jsonMap['name']}');
-    print('url = ${jsonMap['url']}');
-    String string = jsonEncode(jsonMap);
-    print('json = $string');
-  }
+  // void test() {
+  //   const jsonString = "{ \"name\": \"flutter\", \"url\": \"https://coding.imooc.com/class/487.html\" }";
+  //   Map<String, dynamic> jsonMap = jsonDecode(jsonString);
+  //   // ignore: avoid_print
+  //   print('name = ${jsonMap['name']}');
+  //   // ignore: avoid_print
+  //   print('url = ${jsonMap['url']}');
+  //   String string = jsonEncode(jsonMap);
+  //   // ignore: avoid_print
+  //   print('json = $string');
+  // }
 
   Future<void> _incrementCounter() async {
-    test();
     // TestRequest request = TestRequest();
     // request.add('aa', 'abc').add('bb', '123').add('requestPrams', 'kkkk');
     // try {
@@ -93,6 +101,15 @@ class _MyHomePageState extends State<MyHomePage> {
     //   // ignore: avoid_print
     //   print(e);
     // }
+
+    //     HiCache.getInstance().setString("aa", "1234");
+    // var value = HiCache.getInstance().get("aa");
+    // print('value:$value');
+
+    HiCache.getInstance().setString('aa', '1234');
+    var value = HiCache.getInstance().get('aa');
+    // ignore: avoid_print
+    print('value = $value');
   }
 
   @override
