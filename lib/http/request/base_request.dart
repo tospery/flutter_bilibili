@@ -28,7 +28,7 @@ abstract class BaseRequest {
       uri = Uri.http(host(), path ?? '', parameter);
     }
     if (needLogin()) {
-      set(LoginDao.BOARDING_PASS, LoginDao.getBoardingPass());
+      set(LoginDao.boardingPassKey, LoginDao.getBoardingPass());
     }
     return uri.toString();
   }

@@ -5,7 +5,7 @@ import 'package:flutter_bilibili/http/request/login_request.dart';
 import 'package:flutter_bilibili/http/request/registration_request.dart';
 
 class LoginDao {
-  static const BOARDING_PASS = 'boarding-pass';
+  static const boardingPassKey = 'boarding-pass';
   static login(String username, String password) {
     _send(username, password);
   }
@@ -34,12 +34,12 @@ class LoginDao {
     print(result);
     if (result['code'] == 0 && result['data'] != null) {
       // 保存登录令牌
-      HiCache.getInstance().setString(BOARDING_PASS, result['data']);
+      HiCache.getInstance().setString(boardingPassKey, result['data']);
     }
     return result;
   }
 
   static getBoardingPass() {
-    return HiCache.getInstance().get(BOARDING_PASS);
+    return HiCache.getInstance().get(boardingPassKey);
   }
 }
