@@ -1,6 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bilibili/db/hi_cache.dart';
+import 'package:flutter_bilibili/http/core/hi_error.dart';
+import 'package:flutter_bilibili/http/core/hi_net.dart';
+import 'package:flutter_bilibili/http/dao/login_dao.dart';
+import 'package:flutter_bilibili/http/request/notice_request.dart';
 // import 'package:flutter_bilibili/http/core/hi_error.dart';
 // import 'package:flutter_bilibili/http/core/hi_net.dart';
 // import 'package:flutter_bilibili/http/request/test_request.dart';
@@ -61,55 +65,16 @@ class _MyHomePageState extends State<MyHomePage> {
     HiCache.preInit();
   } 
 
-  // void test() {
-  //   const jsonString =
-  //       "{ \"name\": \"flutter\", \"url\": \"https://coding.imooc.com/class/487.html\" }";
-  //   //json 转map
-  //   Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-  //   print('name:${jsonMap['name']}');
-  //   print('url:${jsonMap['url']}');
-  //   //map 转json
-  //   String json = jsonEncode(jsonMap);
-  //   print('json:$json');
-  // }
-
-  // void test() {
-  //   const jsonString = "{ \"name\": \"flutter\", \"url\": \"https://coding.imooc.com/class/487.html\" }";
-  //   Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-  //   // ignore: avoid_print
-  //   print('name = ${jsonMap['name']}');
-  //   // ignore: avoid_print
-  //   print('url = ${jsonMap['url']}');
-  //   String string = jsonEncode(jsonMap);
-  //   // ignore: avoid_print
-  //   print('json = $string');
-  // }
-
   Future<void> _incrementCounter() async {
-    // TestRequest request = TestRequest();
-    // request.add('aa', 'abc').add('bb', '123').add('requestPrams', 'kkkk');
-    // try {
-    //   // ignore: unused_local_variable
-    //   var result = await HiNet.getInstance().fire(request);
-    // } on NeedAuth catch(e) {
-    //   // ignore: avoid_print
-    //   print(e);
-    // } on NeedLogin catch(e) {
-    //   // ignore: avoid_print
-    //   print(e);
-    // } on HiNetError catch(e) {
-    //   // ignore: avoid_print
-    //   print(e);
-    // }
-
-    //     HiCache.getInstance().setString("aa", "1234");
-    // var value = HiCache.getInstance().get("aa");
-    // print('value:$value');
-
-    HiCache.getInstance().setString('aa', '1234');
-    var value = HiCache.getInstance().get('aa');
-    // ignore: avoid_print
-    print('value = $value');
+    try {
+      // var result = await LoginDao.login('tospery', 'abcd1234');
+      var result = await HiNet.getInstance().fire(NoticeRequest());
+      print('result = $result');
+    } on NeedAuth catch (e) {
+      print(e);
+    } on HiNetError catch (e) {
+      print(e);
+    }
   }
 
   @override
