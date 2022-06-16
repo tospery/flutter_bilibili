@@ -5,6 +5,8 @@ import 'package:flutter_bilibili/http/core/hi_error.dart';
 import 'package:flutter_bilibili/http/core/hi_net.dart';
 import 'package:flutter_bilibili/http/request/notice_request.dart';
 import 'package:flutter_bilibili/page/registration_page.dart';
+import 'package:flutter_bilibili/util/color.dart';
+import 'package:flutter_bilibili/util/hi_functions.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,9 +21,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: white,
       ),
-      home: RegistrationPage(),
+      home: const RegistrationPage(),
     );
   }
 }
@@ -47,11 +49,11 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       // var result = await LoginDao.login('tospery', 'abcd1234');
       var result = await HiNet.getInstance().fire(NoticeRequest());
-      print('result = $result');
+      hiPrint('result = $result');
     } on NeedAuth catch (e) {
-      print(e);
+      hiPrint(e);
     } on HiNetError catch (e) {
-      print(e);
+      hiPrint(e);
     }
   }
 
