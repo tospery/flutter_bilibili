@@ -3,6 +3,7 @@ import 'package:flutter_bilibili/http/core/hi_error.dart';
 import 'package:flutter_bilibili/http/dao/login_dao.dart';
 import 'package:flutter_bilibili/util/hi_functions.dart';
 import 'package:flutter_bilibili/widget/app_bar.dart';
+import 'package:flutter_bilibili/widget/login_button.dart';
 import 'package:flutter_bilibili/widget/login_effect.dart';
 import 'package:flutter_bilibili/widget/login_input.dart';
 
@@ -89,21 +90,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-            child: _loginButton(),
+            child: LoginButton('注册', enable: loginEnable, onPressed: checkParams,),
           )
         ],
       ),
-    );
-  }
-
-  _loginButton() {
-    return InkWell(
-      onTap: () {
-        if (loginEnable) {
-          checkParams();
-        }
-      },
-      child: const Text('注册'),
     );
   }
 
@@ -141,17 +131,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
           username ?? "", password ?? "", imoocId ?? "", orderId ?? "");
       hiPrint(result);
       if (result['code'] == 0) {
-        hiPrint('注册成功');
+        showToast('注册成功');
         if (widget.onJumpToLogin != null) {
           widget.onJumpToLogin!();
         }
       } else {
-        hiPrint(result['msg']);
+        showWarnToast(result['msg']);
       }
     } on NeedAuth catch (e) {
-      hiPrint(e);
+      showWarnToast(e.message);
     } on HiNetError catch (e) {
-      hiPrint(e);
+      showWarnToast(e.message);
     }
   }
 }
