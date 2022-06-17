@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bilibili/db/hi_cache.dart';
+import 'package:flutter_bilibili/http/dao/login_dao.dart';
 import 'package:flutter_bilibili/model/video_model.dart';
+import 'package:flutter_bilibili/navigator/hi_navigator.dart';
 import 'package:flutter_bilibili/page/home_page.dart';
+import 'package:flutter_bilibili/page/login_page.dart';
+import 'package:flutter_bilibili/page/registration_page.dart';
 import 'package:flutter_bilibili/page/video_detail_page.dart';
+import 'package:flutter_bilibili/util/color.dart';
 
 void main() {
   runApp(const BiliApp());
@@ -19,13 +24,19 @@ class _BiliAppState extends State<BiliApp> {
   final BiliRouteDelegate _routeDelegate = BiliRouteDelegate();
   @override
   Widget build(BuildContext context) {
-    HiCache.preInit();
-    var widget = Router(
-      routerDelegate: _routeDelegate,
-    );
-    return MaterialApp(
-      home: widget,
-    );
+    return FutureBuilder(
+      future: HiCache.preInit(),
+      builder: (context, snapshot) {
+      var widget = snapshot.connectionState == ConnectionState.done
+          ? Router(routerDelegate: _routeDelegate)
+          : const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+      return MaterialApp(
+        home: widget,
+        theme: ThemeData(primarySwatch: white),
+      );
+    });
   }
 }
 
@@ -36,19 +47,53 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
 
   List<MaterialPage> pages = [];
   VideoModel? videoModel;
-  BiliRoutePath? path;
+  RouteStatus _routeStatus = RouteStatus.home;
 
   BiliRouteDelegate() : navigatorKey = GlobalKey<NavigatorState>();
+  
+  RouteStatus get routeStatus {
+    if (_routeStatus != RouteStatus.registration && !hasLogin) {
+      return _routeStatus = RouteStatus.login;
+    } else if (videoModel != null) {
+      return _routeStatus = RouteStatus.detail;
+    } else {
+      return _routeStatus;
+    }
+  }
+  
+  bool get hasLogin => LoginDao.getBoardingPass() != null;
 
   @override
   Widget build(BuildContext context) {
-    pages = [
-      wrapPage(HomePage(onJumpToDetail: (videoModel) {
+    var index = getPageIndex(pages, routeStatus);
+    List<MaterialPage> tempPages = pages;
+    if (index != -1) {
+      //要打开的页面在栈中已存在，则将该页面和它上面的所有页面进行出栈
+      //tips 具体规则可以根据需要进行调整，这里要求栈中只允许有一个同样的页面的实例
+      tempPages = tempPages.sublist(0, index);
+    }
+    // ignore: prefer_typing_uninitialized_variables
+    var page;
+    if (routeStatus == RouteStatus.home) {
+      //跳转首页时将栈中其它页面进行出栈，因为首页不可回退
+      pages.clear();
+      page = wrapPage(HomePage(onJumpToDetail: (videoModel){
         this.videoModel = videoModel;
         notifyListeners();
-      })),
-      if (videoModel != null) wrapPage(VideoDetailPage(videoModel: videoModel!))
-    ];
+      }));
+    } else if (routeStatus == RouteStatus.detail) {
+      page = wrapPage(VideoDetailPage(videoModel: videoModel!));
+    }else if (routeStatus == RouteStatus.registration) {
+      page = wrapPage(RegistrationPage(onJumpToLogin: (){
+        _routeStatus = RouteStatus.login;
+        notifyListeners();
+      },));
+    }else if (routeStatus == RouteStatus.login) {
+      page = wrapPage(const LoginPage());
+    }
+    //重新创建一个数组，否则pages因引用没有改变路由不会生效
+    tempPages = [...tempPages, page];
+    pages = tempPages;
     return Navigator(
       key: navigatorKey,
       pages: pages,
@@ -63,7 +108,6 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
 
   @override
   Future<void> setNewRoutePath(BiliRoutePath configuration) async {
-    path = configuration;
   }
 }
 
@@ -72,8 +116,4 @@ class BiliRoutePath {
 
   BiliRoutePath.home() : location = '/';
   BiliRoutePath.detail() : location = '/detail';
-}
-
-wrapPage(Widget child) {
-  return MaterialPage(key: ValueKey(child.hashCode), child: child);
 }
