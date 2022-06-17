@@ -8,6 +8,7 @@ import 'package:flutter_bilibili/page/login_page.dart';
 import 'package:flutter_bilibili/page/registration_page.dart';
 import 'package:flutter_bilibili/page/video_detail_page.dart';
 import 'package:flutter_bilibili/util/color.dart';
+import 'package:flutter_bilibili/util/hi_functions.dart';
 
 void main() {
   runApp(const BiliApp());
@@ -25,18 +26,18 @@ class _BiliAppState extends State<BiliApp> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: HiCache.preInit(),
-      builder: (context, snapshot) {
-      var widget = snapshot.connectionState == ConnectionState.done
-          ? Router(routerDelegate: _routeDelegate)
-          : const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-      return MaterialApp(
-        home: widget,
-        theme: ThemeData(primarySwatch: white),
-      );
-    });
+        future: HiCache.preInit(),
+        builder: (context, snapshot) {
+          var widget = snapshot.connectionState == ConnectionState.done
+              ? Router(routerDelegate: _routeDelegate)
+              : const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+          return MaterialApp(
+            home: widget,
+            theme: ThemeData(primarySwatch: white),
+          );
+        });
   }
 }
 
@@ -50,7 +51,7 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
   RouteStatus _routeStatus = RouteStatus.home;
 
   BiliRouteDelegate() : navigatorKey = GlobalKey<NavigatorState>();
-  
+
   RouteStatus get routeStatus {
     if (_routeStatus != RouteStatus.registration && !hasLogin) {
       return _routeStatus = RouteStatus.login;
@@ -60,7 +61,7 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
       return _routeStatus;
     }
   }
-  
+
   bool get hasLogin => LoginDao.getBoardingPass() != null;
 
   @override
@@ -77,38 +78,56 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
     if (routeStatus == RouteStatus.home) {
       //跳转首页时将栈中其它页面进行出栈，因为首页不可回退
       pages.clear();
-      page = wrapPage(HomePage(onJumpToDetail: (videoModel){
+      page = wrapPage(HomePage(onJumpToDetail: (videoModel) {
         this.videoModel = videoModel;
         notifyListeners();
       }));
     } else if (routeStatus == RouteStatus.detail) {
       page = wrapPage(VideoDetailPage(videoModel: videoModel!));
-    }else if (routeStatus == RouteStatus.registration) {
-      page = wrapPage(RegistrationPage(onJumpToLogin: (){
-        _routeStatus = RouteStatus.login;
+    } else if (routeStatus == RouteStatus.registration) {
+      page = wrapPage(RegistrationPage(
+        onJumpToLogin: () {
+          _routeStatus = RouteStatus.login;
+          notifyListeners();
+        },
+      ));
+    } else if (routeStatus == RouteStatus.login) {
+      page = wrapPage(LoginPage(onSuccess: () {
+        _routeStatus = RouteStatus.home;
         notifyListeners();
-      },));
-    }else if (routeStatus == RouteStatus.login) {
-      page = wrapPage(const LoginPage());
+      }, onJumpToRegistration: () {
+        _routeStatus = RouteStatus.registration;
+        notifyListeners();
+      }));
     }
     //重新创建一个数组，否则pages因引用没有改变路由不会生效
     tempPages = [...tempPages, page];
     pages = tempPages;
-    return Navigator(
+    return WillPopScope(child: Navigator(
       key: navigatorKey,
       pages: pages,
       onPopPage: (route, result) {
+          if (route.settings is MaterialPage) {
+            //登录页未登录返回拦截
+            if ((route.settings as MaterialPage).child is LoginPage) {
+              if (!hasLogin) {
+                showWarnToast('请先登录');
+                return false;
+              }
+            }
+          }
         if (!route.didPop(result)) {
           return false;
         }
+        pages.removeLast();
         return true;
       },
-    );
+    ), onWillPop: () async => !(await navigatorKey.currentState?.maybePop() ?? false))
+    ;
   }
 
   @override
-  Future<void> setNewRoutePath(BiliRoutePath configuration) async {
-  }
+  Future<void> setNewRoutePath(BiliRoutePath configuration) async {}
 }
 
 class BiliRoutePath {
