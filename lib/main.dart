@@ -91,3 +91,42 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
+  with ChangeNotifier, PopNavigatorRouterDelegateMixin<BiliRoutePath> {
+    final GlobalKey<NavigatorState> navigatorKey;
+List<MaterialPage> pages = [];
+
+  BiliRouteDelegate() : navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  Widget build(BuildContext context) {
+    pages = [
+      wrapPage(context.widget)
+    ];
+    return Navigator(key: navigatorKey, pages: pages, onPopPage: (route, result){
+      if (!route.didPop(result)) {
+        return false;
+      }
+      return true;
+    },); 
+  }
+  
+  @override
+  Future<void> setNewRoutePath(BiliRoutePath configuration) {
+    // TODO: implement setNewRoutePath
+    throw UnimplementedError();
+  }
+
+  }
+
+class BiliRoutePath {
+  final String location;
+
+  BiliRoutePath.home() : location='/';
+  BiliRoutePath.detail() : location='/detail';
+}
+
+wrapPage(Widget child) {
+  return MaterialPage(key: ValueKey(child.hashCode), child: child);
+}
