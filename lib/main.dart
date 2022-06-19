@@ -50,7 +50,19 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
   VideoModel? videoModel;
   RouteStatus _routeStatus = RouteStatus.home;
 
-  BiliRouteDelegate() : navigatorKey = GlobalKey<NavigatorState>();
+  // //实现路由跳转逻辑
+
+  BiliRouteDelegate() : navigatorKey = GlobalKey<NavigatorState>() {
+    //实现路由跳转逻辑
+    HiNavigator.getInstance().registerRouteJump(
+        RouteJumpListener(onJumpTo: (RouteStatus routeStatus, {Map? args}) {
+      _routeStatus = routeStatus;
+      if (routeStatus == RouteStatus.detail) {
+        videoModel = args!['videoMo'];
+      }
+      notifyListeners();
+    }));
+  }
 
   RouteStatus get routeStatus {
     if (_routeStatus != RouteStatus.registration && !hasLogin) {
@@ -78,52 +90,40 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
     if (routeStatus == RouteStatus.home) {
       //跳转首页时将栈中其它页面进行出栈，因为首页不可回退
       pages.clear();
-      page = wrapPage(HomePage(onJumpToDetail: (videoModel) {
-        this.videoModel = videoModel;
-        notifyListeners();
-      }));
+      page = wrapPage(const HomePage());
     } else if (routeStatus == RouteStatus.detail) {
       page = wrapPage(VideoDetailPage(videoModel: videoModel!));
     } else if (routeStatus == RouteStatus.registration) {
-      page = wrapPage(RegistrationPage(
-        onJumpToLogin: () {
-          _routeStatus = RouteStatus.login;
-          notifyListeners();
-        },
-      ));
+      page = wrapPage(const RegistrationPage());
     } else if (routeStatus == RouteStatus.login) {
-      page = wrapPage(LoginPage(onSuccess: () {
-        _routeStatus = RouteStatus.home;
-        notifyListeners();
-      }, onJumpToRegistration: () {
-        _routeStatus = RouteStatus.registration;
-        notifyListeners();
-      }));
+      page = wrapPage(const LoginPage());
     }
     //重新创建一个数组，否则pages因引用没有改变路由不会生效
     tempPages = [...tempPages, page];
     pages = tempPages;
-    return WillPopScope(child: Navigator(
-      key: navigatorKey,
-      pages: pages,
-      onPopPage: (route, result) {
-          if (route.settings is MaterialPage) {
-            //登录页未登录返回拦截
-            if ((route.settings as MaterialPage).child is LoginPage) {
-              if (!hasLogin) {
-                showWarnToast('请先登录');
-                return false;
+    return WillPopScope(
+        child: Navigator(
+          key: navigatorKey,
+          pages: pages,
+          onPopPage: (route, result) {
+            if (route.settings is MaterialPage) {
+              //登录页未登录返回拦截
+              if ((route.settings as MaterialPage).child is LoginPage) {
+                if (!hasLogin) {
+                  showWarnToast('请先登录');
+                  return false;
+                }
               }
             }
-          }
-        if (!route.didPop(result)) {
-          return false;
-        }
-        pages.removeLast();
-        return true;
-      },
-    ), onWillPop: () async => !(await navigatorKey.currentState?.maybePop() ?? false))
-    ;
+            if (!route.didPop(result)) {
+              return false;
+            }
+            pages.removeLast();
+            return true;
+          },
+        ),
+        onWillPop: () async =>
+            !(await navigatorKey.currentState?.maybePop() ?? false));
   }
 
   @override
