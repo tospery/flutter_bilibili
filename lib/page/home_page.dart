@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bilibili/model/video_model.dart';
 import 'package:flutter_bilibili/navigator/hi_navigator.dart';
 import 'package:flutter_bilibili/page/home_tab_page.dart';
 import 'package:flutter_bilibili/util/color.dart';
