@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bilibili/db/hi_cache.dart';
 import 'package:flutter_bilibili/http/dao/login_dao.dart';
-import 'package:flutter_bilibili/model/video_model.dart';
+import 'package:flutter_bilibili/model/video.dart';
 import 'package:flutter_bilibili/navigator/bottom_navigator.dart';
 import 'package:flutter_bilibili/navigator/hi_navigator.dart';
 import 'package:flutter_bilibili/page/login_page.dart';
@@ -47,7 +47,7 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
   final GlobalKey<NavigatorState> navigatorKey;
 
   List<MaterialPage> pages = [];
-  VideoModel? videoModel;
+  Video? video;
   RouteStatus _routeStatus = RouteStatus.home;
 
   // //实现路由跳转逻辑
@@ -58,7 +58,7 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
         RouteJumpListener(onJumpTo: (RouteStatus routeStatus, {Map? args}) {
       _routeStatus = routeStatus;
       if (routeStatus == RouteStatus.detail) {
-        videoModel = args!['videoMo'];
+        video = args!['videoMo'];
       }
       notifyListeners();
     }));
@@ -67,7 +67,7 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
   RouteStatus get routeStatus {
     if (_routeStatus != RouteStatus.registration && !hasLogin) {
       return _routeStatus = RouteStatus.login;
-    } else if (videoModel != null) {
+    } else if (video != null) {
       return _routeStatus = RouteStatus.detail;
     } else {
       return _routeStatus;
@@ -92,7 +92,7 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
       pages.clear();
       page = wrapPage(const BottomNavigator());
     } else if (routeStatus == RouteStatus.detail) {
-      page = wrapPage(VideoDetailPage(videoModel: videoModel!));
+      page = wrapPage(VideoDetailPage(video: video!));
     } else if (routeStatus == RouteStatus.registration) {
       page = wrapPage(const RegistrationPage());
     } else if (routeStatus == RouteStatus.login) {

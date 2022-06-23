@@ -5,6 +5,7 @@ enum HttpMethod { get, post, delete }
 
 abstract class BaseRequest {
   var useHttps = true;
+  var pathExtra = '';
   var parameter = <String, String>{};
   Map<String, dynamic> header = {
     HiConstants.authTokenKey: HiConstants.authTokenValue,
@@ -21,11 +22,20 @@ abstract class BaseRequest {
 
   String urlString() {
     Uri uri;
-    var path = this.path();
+    var path = this.path() ?? '';
+
+    if (pathExtra.isNotEmpty) {
+      if (path.endsWith('/')) {
+        path = '$path$pathExtra';
+      } else {
+        path = '$path/$pathExtra';
+      }
+    }
+
     if (useHttps) {
-      uri = Uri.https(host(), path ?? '', parameter);
+      uri = Uri.https(host(), path, parameter);
     } else {
-      uri = Uri.http(host(), path ?? '', parameter);
+      uri = Uri.http(host(), path, parameter);
     }
     if (needLogin()) {
       set(LoginDao.boardingPassKey, LoginDao.getBoardingPass());
