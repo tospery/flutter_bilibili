@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bilibili/util/hi_types.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 void hiPrint(log, {String? tag}) {
@@ -22,9 +26,30 @@ void showWarnToast(String text) {
 }
 
 void showToast(String text) {
-    Fluttertoast.showToast(
+  Fluttertoast.showToast(
     msg: text,
     toastLength: Toast.LENGTH_LONG,
     gravity: ToastGravity.CENTER,
+  );
+}
+
+void changeStatusBar(
+    {Color color = Colors.white,
+    StatusStyle statusStyle = StatusStyle.dark,
+    BuildContext? context}) {
+  Brightness brightness;
+  if (Platform.isIOS) {
+        brightness = statusStyle == StatusStyle.light ? Brightness.dark : Brightness.light;
+  } else {
+    brightness = statusStyle == StatusStyle.light
+        ? Brightness.light
+        : Brightness.dark;
+  }
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle.light.copyWith(
+      statusBarColor: Colors.transparent,
+      statusBarBrightness: brightness,
+      statusBarIconBrightness: brightness
+    )
   );
 }

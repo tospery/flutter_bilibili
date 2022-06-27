@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
-
-enum StatusStyle { dark, light }
+import 'package:flutter_bilibili/util/hi_functions.dart';
+import 'package:flutter_bilibili/util/hi_types.dart';
 
 class NavigationBarPlus extends StatelessWidget {
   final StatusStyle statusStyle;
@@ -31,7 +29,6 @@ class NavigationBarPlus extends StatelessWidget {
   }
   
   void _statusBarInit() {
-    FlutterStatusbarManager.setColor(color, animated: false);
-    FlutterStatusbarManager.setStyle(statusStyle == StatusStyle.dark ? StatusBarStyle.DARK_CONTENT : StatusBarStyle.LIGHT_CONTENT);
+    changeStatusBar(color: color, statusStyle: statusStyle);
   }
 }

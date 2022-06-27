@@ -8,6 +8,7 @@ import 'package:flutter_bilibili/navigator/hi_navigator.dart';
 import 'package:flutter_bilibili/page/home_tab_page.dart';
 import 'package:flutter_bilibili/util/color.dart';
 import 'package:flutter_bilibili/util/hi_functions.dart';
+import 'package:flutter_bilibili/util/hi_types.dart';
 import 'package:flutter_bilibili/widget/navigation_bar.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 import 'package:flutter_bilibili/core/hi_state.dart';

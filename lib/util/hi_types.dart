@@ -1,0 +1,2 @@
+
+enum StatusStyle { dark, light }
