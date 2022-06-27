@@ -8,11 +8,15 @@ import 'package:flutter_bilibili/navigator/hi_navigator.dart';
 import 'package:flutter_bilibili/page/home_tab_page.dart';
 import 'package:flutter_bilibili/util/color.dart';
 import 'package:flutter_bilibili/util/hi_functions.dart';
+import 'package:flutter_bilibili/widget/navigation_bar.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 import 'package:flutter_bilibili/core/hi_state.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  // final ValueChanged<int>? onJumpTo;
+  final ValueChanged<int>? onJumpTo;
+
+  const HomePage({super.key, this.onJumpTo});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -54,6 +58,12 @@ class _HomePageState extends HiState<HomePage>
     return Scaffold(
       body: Column(
         children: [
+          NavigationBarPlus(
+            height: 50,
+            child: _appBar(),
+            color: Colors.white,
+            statusStyle: StatusStyle.dark,
+          ),
           Container(
             color: Colors.white,
             padding: const EdgeInsets.only(top: 30),
@@ -104,8 +114,8 @@ class _HomePageState extends HiState<HomePage>
     try {
       Home result = await HomeDao.get('推荐');
       hiPrint('loadData():$result');
-        _controller = TabController(
-            length: result.categoryList.length, vsync: this);
+      _controller =
+          TabController(length: result.categoryList.length, vsync: this);
       setState(() {
         categoryList = result.categoryList;
         bannerList = result.bannerList.cast<Banner>();
@@ -115,5 +125,59 @@ class _HomePageState extends HiState<HomePage>
     } on HiNetError catch (e) {
       hiPrint(e);
     }
+  }
+
+  _appBar() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 15, right: 15),
+      child: Row(
+        children: [
+          InkWell(
+            onTap: () {
+              if (widget.onJumpTo != null) {
+                widget.onJumpTo!(3);
+              }
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(23),
+              child: const Image(
+                height: 46,
+                width: 46,
+                image: AssetImage('res/image/avatar.png'),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  height: 32,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(color: Colors.grey[100]),
+                  child: const Icon(
+                    Icons.search,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const Icon(
+            Icons.explore_outlined,
+            color: Colors.grey,
+          ),
+          const Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Icon(
+              Icons.mail_outline,
+              color: Colors.grey,
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
