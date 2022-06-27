@@ -58,7 +58,7 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
         RouteJumpListener(onJumpTo: (RouteStatus routeStatus, {Map? args}) {
       _routeStatus = routeStatus;
       if (routeStatus == RouteStatus.detail) {
-        video = args!['videoMo'];
+        video = args!['video'];
       }
       notifyListeners();
     }));

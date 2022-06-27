@@ -1,5 +1,7 @@
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Banner;
+import 'package:flutter_bilibili/model/banner.dart';
+import 'package:flutter_bilibili/widget/hi_banner.dart';
 
 class HomeTabPage extends StatefulWidget {
   final String categoryName;
@@ -15,6 +17,14 @@ class HomeTabPage extends StatefulWidget {
 class _HomeTabPageState extends State<HomeTabPage> {
   @override
   Widget build(BuildContext context) {
-    return Text(widget.categoryName);
+    return ListView(
+      children: [if (widget.bannerList != null) _banner()],
+    );
   }
+  
+  _banner() {
+    return Padding(padding: const EdgeInsets.only(left: 8, right: 8),
+    child: HiBanner(widget.bannerList!),);
+  }
+
 }

@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Banner;
 import 'package:flutter_bilibili/http/core/hi_error.dart';
 import 'package:flutter_bilibili/http/dao/home_dao.dart';
+import 'package:flutter_bilibili/model/banner.dart';
 import 'package:flutter_bilibili/model/category.dart';
 import 'package:flutter_bilibili/model/home.dart';
 import 'package:flutter_bilibili/navigator/hi_navigator.dart';
