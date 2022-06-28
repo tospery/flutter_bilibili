@@ -69,7 +69,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
     var currentIndex = pageIndex + (loadMore ? 1 : 0);
     try {
       Home result = await HomeDao.get(widget.categoryName,
-          pageIndex: currentIndex, pageSize: 50);
+          pageIndex: currentIndex, pageSize: 10);
       setState(() {
         if (loadMore) {
           if (result.videoList.isNotEmpty) {
