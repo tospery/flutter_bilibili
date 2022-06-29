@@ -1,5 +1,5 @@
 {
-    "bannerList": "$[]Banner",
-    "categoryList": "$[]Category",
-    "videoList": "$[]Video"
+    "bannerList?": "$[]Banner",
+    "categoryList?": "$[]Category",
+    "videoList?": "$[]Video"
 }

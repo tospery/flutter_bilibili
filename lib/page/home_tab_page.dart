@@ -98,12 +98,12 @@ class _HomeTabPageState extends State<HomeTabPage>
           pageIndex: currentIndex, pageSize: 10);
       setState(() {
         if (loadMore) {
-          if (result.videoList.isNotEmpty) {
-            videoList = [...videoList, ...result.videoList];
+          if (result.videoList?.isNotEmpty ?? false) {
+            videoList = [...videoList, ...result.videoList!];
             pageIndex++;
           }
         } else {
-          videoList = result.videoList;
+          videoList = result.videoList ?? [];
         }
       });
       Future.delayed(const Duration(milliseconds: 1000), () {
