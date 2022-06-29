@@ -35,7 +35,7 @@ class VideoCard extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Stack(
       children: [
-        Image.network(video.cover, width: size.width / 2 - 10, height: 120),
+        cachedImage(video.cover, width: size.width / 2 - 10, height: 120),
         Positioned(
             left: 0,
             right: 0,
@@ -110,7 +110,7 @@ class VideoCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.network(
+              child: cachedImage(
                 owner.face,
                 height: 24,
                 width: 24,
