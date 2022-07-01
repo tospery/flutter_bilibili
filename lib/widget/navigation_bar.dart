@@ -6,14 +6,14 @@ class NavigationBarPlus extends StatelessWidget {
   final StatusStyle statusStyle;
   final Color color;
   final double height;
-  final Widget child;
+  final Widget? child;
 
   const NavigationBarPlus(
       {super.key,
       this.statusStyle = StatusStyle.dark,
       this.color = Colors.white,
       this.height = 46,
-      required this.child});
+     this.child});
 
   @override
   Widget build(BuildContext context) {
