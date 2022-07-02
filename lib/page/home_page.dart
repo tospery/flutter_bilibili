@@ -8,12 +8,11 @@ import 'package:flutter_bilibili/navigator/hi_navigator.dart';
 import 'package:flutter_bilibili/page/home_tab_page.dart';
 import 'package:flutter_bilibili/page/profile_page.dart';
 import 'package:flutter_bilibili/page/video_detail_page.dart';
-import 'package:flutter_bilibili/util/color.dart';
 import 'package:flutter_bilibili/util/hi_functions.dart';
 import 'package:flutter_bilibili/util/hi_types.dart';
+import 'package:flutter_bilibili/widget/hi_tab.dart';
 import 'package:flutter_bilibili/widget/loading_container.dart';
 import 'package:flutter_bilibili/widget/navigation_bar.dart';
-import 'package:underline_indicator/underline_indicator.dart';
 import 'package:flutter_bilibili/core/hi_state.dart';
 
 class HomePage extends StatefulWidget {
@@ -39,7 +38,6 @@ class _HomePageState extends HiState<HomePage>
   late TabController _controller;
   bool _isLoading = true;
   // Widget? _currentPage;
-  Widget? _currentPage;
 
   @override
   void initState() {
@@ -47,7 +45,6 @@ class _HomePageState extends HiState<HomePage>
     WidgetsBinding.instance.addObserver(this);
     _controller = TabController(length: categoryList.length, vsync: this);
     HiNavigator.getInstance().addListener(listener = (current, pre) {
-      _currentPage = current.page;
       if (widget == current.page || current.page is HomePage) {
         hiPrint('打开了首页:onResume');
       } else if (widget == pre?.page || pre?.page is HomePage) {
@@ -126,26 +123,18 @@ class _HomePageState extends HiState<HomePage>
   bool get wantKeepAlive => true;
 
   _tabBar() {
-    return TabBar(
-        controller: _controller,
-        isScrollable: true,
-        labelColor: Colors.black,
-        indicator: const UnderlineIndicator(
-          strokeCap: StrokeCap.round,
-          borderSide: BorderSide(color: primary, width: 3),
-          insets: EdgeInsets.only(left: 15, right: 15),
-        ),
-        tabs: categoryList.map<Tab>((tab) {
-          return Tab(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 5, right: 5),
-              child: Text(
-                tab.name,
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
-          );
-        }).toList());
+    return HiTab(
+      categoryList.map<Tab>((tab) {
+        return Tab(
+          text: tab.name,
+        );
+      }).toList(),
+      controller: _controller,
+      fontSize: 16,
+      borderWidth: 3,
+      unselectedLabelColor: Colors.black54,
+      insets: 13,
+    );
   }
 
   void loadData() async {
