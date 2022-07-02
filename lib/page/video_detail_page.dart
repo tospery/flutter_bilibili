@@ -38,6 +38,12 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
               child: null,
             ),
             _videoView(),
+            InkWell(
+              onTap: () {
+                Navigator.maybePop(context);
+              },
+              child: const Text('返回'),
+            ),
             Text('视频详情: ${widget.video.vid}'),
             Text('视频标题: ${widget.video.title}'),
           ],

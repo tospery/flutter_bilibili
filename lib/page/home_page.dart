@@ -6,6 +6,8 @@ import 'package:flutter_bilibili/model/category.dart';
 import 'package:flutter_bilibili/model/home.dart';
 import 'package:flutter_bilibili/navigator/hi_navigator.dart';
 import 'package:flutter_bilibili/page/home_tab_page.dart';
+import 'package:flutter_bilibili/page/profile_page.dart';
+import 'package:flutter_bilibili/page/video_detail_page.dart';
 import 'package:flutter_bilibili/util/color.dart';
 import 'package:flutter_bilibili/util/hi_functions.dart';
 import 'package:flutter_bilibili/util/hi_types.dart';
@@ -25,7 +27,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends HiState<HomePage>
-    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
+    with
+        AutomaticKeepAliveClientMixin,
+        TickerProviderStateMixin,
+        WidgetsBindingObserver {
 // ignore: prefer_typing_uninitialized_variables
   var listener;
 
@@ -33,16 +38,25 @@ class _HomePageState extends HiState<HomePage>
   List<Banner> bannerList = [];
   late TabController _controller;
   bool _isLoading = true;
+  // Widget? _currentPage;
+  Widget? _currentPage;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _controller = TabController(length: categoryList.length, vsync: this);
     HiNavigator.getInstance().addListener(listener = (current, pre) {
+      _currentPage = current.page;
       if (widget == current.page || current.page is HomePage) {
         hiPrint('打开了首页:onResume');
       } else if (widget == pre?.page || pre?.page is HomePage) {
         hiPrint('首页:onPause');
+      }
+      // 当页面返回到首页恢复首页的状态栏样式
+      if (pre?.page is VideoDetailPage && current.page is! ProfilePage) {
+        var statusStyle = StatusStyle.dark;
+        changeStatusBar(color: Colors.white, statusStyle: statusStyle);
       }
     });
     loadData();
@@ -50,9 +64,28 @@ class _HomePageState extends HiState<HomePage>
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     HiNavigator.getInstance().removeListener(listener);
     _controller.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    hiPrint('$state', tag: 'didChangeAppLifecycleState');
+    switch (state) {
+      case AppLifecycleState.inactive:
+        break;
+      case AppLifecycleState.resumed:
+        //fix Android压后台首页状态栏字体颜色变白，详情页状态栏字体变黑问题
+        changeStatusBar();
+        break;
+      case AppLifecycleState.paused:
+        break;
+      case AppLifecycleState.detached:
+        break;
+    }
   }
 
   @override
