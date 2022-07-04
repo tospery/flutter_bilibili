@@ -181,6 +181,23 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   void _doUnLike() {
   }
 
-  void _doFavorite() {
+  void _doFavorite() async {
+    try {
+      var result = await VideoDetailDao.favorite(video!.vid, !videoDetail!.isFavorite);
+      hiPrint(result);
+      videoDetail!.isFavorite = !videoDetail!.isFavorite;
+      if (videoDetail!.isFavorite) {
+        video!.favorite += 1;
+      } else {
+        video!.favorite -= 1;
+      }
+      setState(() {
+        video = video;
+        videoDetail = videoDetail;
+      });
+    } on HiNetError catch (e) {
+      hiPrint(e);
+      showWarnToast(e.message);
+    }
   }
 }
