@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bilibili/model/video.dart';
 import 'package:flutter_bilibili/util/hi_functions.dart';
 import 'package:flutter_bilibili/util/hi_types.dart';
+import 'package:flutter_bilibili/widget/expandable_content.dart';
 import 'package:flutter_bilibili/widget/hi_tab.dart';
 import 'package:flutter_bilibili/widget/navigation_bar.dart';
 import 'package:flutter_bilibili/widget/video_header.dart';
@@ -123,12 +124,22 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       children: [
         ...buildContents(),
         //...buildVideoList(),
+        Container(
+          height: 500,
+          margin: const EdgeInsets.only(top: 10),
+          alignment: Alignment.topLeft,
+          decoration: const BoxDecoration(color: Colors.lightBlueAccent),
+          child: const Text('展开列表'),
+        ),
       ],
     );
   }
 
   buildContents() {
-    return [VideoHeader(owner: widget.video.owner)];
+    return [
+      VideoHeader(owner: widget.video.owner),
+      ExpandableContent(video: widget.video)
+    ];
   }
 
   //buildVideoList() {}

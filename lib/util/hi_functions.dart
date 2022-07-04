@@ -40,19 +40,16 @@ void changeStatusBar(
     BuildContext? context}) {
   Brightness brightness;
   if (Platform.isIOS) {
-        brightness = statusStyle == StatusStyle.light ? Brightness.dark : Brightness.light;
+    brightness =
+        statusStyle == StatusStyle.light ? Brightness.dark : Brightness.light;
   } else {
-    brightness = statusStyle == StatusStyle.light
-        ? Brightness.light
-        : Brightness.dark;
+    brightness =
+        statusStyle == StatusStyle.light ? Brightness.light : Brightness.dark;
   }
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle.light.copyWith(
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
       statusBarColor: Colors.transparent,
       statusBarBrightness: brightness,
-      statusBarIconBrightness: brightness
-    )
-  );
+      statusBarIconBrightness: brightness));
 }
 
 String durationTransform(int seconds) {
@@ -79,8 +76,28 @@ Widget cachedImage(String url, {double? width, double? height}) {
     width: width,
     height: height,
     fit: BoxFit.cover,
-    placeholder: (BuildContext context, String url) => Container(color: Colors.grey[200]),
-    errorWidget: (BuildContext context, String url, dynamic error) => const Icon(Icons.error),
+    placeholder: (BuildContext context, String url) =>
+        Container(color: Colors.grey[200]),
+    errorWidget: (BuildContext context, String url, dynamic error) =>
+        const Icon(Icons.error),
     imageUrl: url,
   );
+}
+
+smallIconText(IconData iconData, var text) {
+  var style = const TextStyle(fontSize: 12, color: Colors.grey);
+  if (text is int) {
+    text = countFormat(text);
+  }
+  return [
+    Icon(
+      iconData,
+      color: Colors.grey,
+      size: 12,
+    ),
+    Text(
+      '$text',
+      style: style,
+    ),
+  ];
 }
