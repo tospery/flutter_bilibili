@@ -10,6 +10,7 @@ import 'package:flutter_bilibili/widget/expandable_content.dart';
 import 'package:flutter_bilibili/widget/hi_tab.dart';
 import 'package:flutter_bilibili/widget/navigation_bar.dart';
 import 'package:flutter_bilibili/widget/video_header.dart';
+import 'package:flutter_bilibili/widget/video_toolbar.dart';
 import 'package:flutter_bilibili/widget/video_view.dart';
 
 class VideoDetailPage extends StatefulWidget {
@@ -25,6 +26,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     with TickerProviderStateMixin {
   late TabController _controller;
   List tabs = ['简介', '评论288'];
+  Video? video;
   VideoDetail? videoDetail;
 
   @override
@@ -32,6 +34,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     super.initState();
     changeStatusBar(color: Colors.black, statusStyle: StatusStyle.light);
     _controller = TabController(length: tabs.length, vsync: this);
+    video = widget.video;
     _loadDetail();
   }
 
@@ -47,7 +50,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       body: MediaQuery.removePadding(
         removeTop: Platform.isIOS,
         context: context,
-        child: Column(
+        child: video?.url != null ? Column(
           children: [
             NavigationBarPlus(
               color: Colors.black,
@@ -75,14 +78,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
               ),
             ),
           ],
-        ),
+        ) : Container(),
       ),
     );
   }
 
   _buildVideoView() {
-    var video = widget.video;
-    return VideoView(video.url, cover: video.cover);
+    return VideoView(video!.url, cover: video!.cover);
   }
 
   _buildTabNavigation() {
@@ -141,8 +143,16 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   buildContents() {
     return [
-      VideoHeader(owner: widget.video.owner),
-      ExpandableContent(video: widget.video)
+      VideoHeader(owner: video!.owner),
+      ExpandableContent(video: video!),
+      VideoToolBar(
+        video: video!,
+        videoDetail: videoDetail,
+        onLike: _doLike,
+        onUnLike: _doUnLike,
+        onFavorite: _doFavorite,
+      )
+
     ];
   }
 
@@ -150,9 +160,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   void _loadDetail() async {
     try {
-      VideoDetail result = await VideoDetailDao.get(widget.video.vid);
+      VideoDetail result = await VideoDetailDao.get(video!.vid);
       setState(() {
         videoDetail = result;
+        video = result.videoInfo;
       });
     } on NeedAuth catch (e) {
       hiPrint(e);
@@ -163,4 +174,13 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     }
   }
 
+
+  void _doLike() {
+  }
+
+  void _doUnLike() {
+  }
+
+  void _doFavorite() {
+  }
 }
