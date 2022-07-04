@@ -10,6 +10,7 @@ import 'package:flutter_bilibili/widget/expandable_content.dart';
 import 'package:flutter_bilibili/widget/hi_tab.dart';
 import 'package:flutter_bilibili/widget/navigation_bar.dart';
 import 'package:flutter_bilibili/widget/video_header.dart';
+import 'package:flutter_bilibili/widget/video_large_card.dart';
 import 'package:flutter_bilibili/widget/video_toolbar.dart';
 import 'package:flutter_bilibili/widget/video_view.dart';
 
@@ -28,6 +29,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   List tabs = ['简介', '评论288'];
   Video? video;
   VideoDetail? videoDetail;
+  List<Video> videoList = [];
 
   @override
   void initState() {
@@ -50,35 +52,37 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       body: MediaQuery.removePadding(
         removeTop: Platform.isIOS,
         context: context,
-        child: video?.url != null ? Column(
-          children: [
-            NavigationBarPlus(
-              color: Colors.black,
-              statusStyle: StatusStyle.light,
-              height: Platform.isAndroid ? 0 : 46,
-              child: null,
-            ),
-            _buildVideoView(),
-            InkWell(
-              onTap: () {
-                Navigator.maybePop(context);
-              },
-              child: const Text('返回'),
-            ),
-            _buildTabNavigation(),
-            Flexible(
-              child: TabBarView(
-                controller: _controller,
+        child: video?.url != null
+            ? Column(
                 children: [
-                  _buildDetailList(),
-                  Container(
-                    child: const Text('敬请期待...'),
-                  )
+                  NavigationBarPlus(
+                    color: Colors.black,
+                    statusStyle: StatusStyle.light,
+                    height: Platform.isAndroid ? 0 : 46,
+                    child: null,
+                  ),
+                  _buildVideoView(),
+                  InkWell(
+                    onTap: () {
+                      Navigator.maybePop(context);
+                    },
+                    child: const Text('返回'),
+                  ),
+                  _buildTabNavigation(),
+                  Flexible(
+                    child: TabBarView(
+                      controller: _controller,
+                      children: [
+                        _buildDetailList(),
+                        Container(
+                          child: const Text('敬请期待...'),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
-              ),
-            ),
-          ],
-        ) : Container(),
+              )
+            : Container(),
       ),
     );
   }
@@ -129,14 +133,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       padding: const EdgeInsets.all(0),
       children: [
         ...buildContents(),
-        //...buildVideoList(),
-        Container(
-          height: 500,
-          margin: const EdgeInsets.only(top: 10),
-          alignment: Alignment.topLeft,
-          decoration: const BoxDecoration(color: Colors.lightBlueAccent),
-          child: const Text('展开列表'),
-        ),
+        ...buildVideoList(),
+        // Container(
+        //   height: 500,
+        //   margin: const EdgeInsets.only(top: 10),
+        //   alignment: Alignment.topLeft,
+        //   decoration: const BoxDecoration(color: Colors.lightBlueAccent),
+        //   child: const Text('展开列表'),
+        // ),
       ],
     );
   }
@@ -152,11 +156,12 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         onUnLike: _doUnLike,
         onFavorite: _doFavorite,
       )
-
     ];
   }
 
-  //buildVideoList() {}
+  buildVideoList() {
+    return videoList.map((v) => VideoLargeCard(video: v));
+  }
 
   void _loadDetail() async {
     try {
@@ -164,26 +169,25 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       setState(() {
         videoDetail = result;
         video = result.videoInfo;
+        videoList = result.videoList;
       });
     } on NeedAuth catch (e) {
       hiPrint(e);
       showWarnToast(e.message);
-    } on HiNetError catch(e) {
-            hiPrint(e);
+    } on HiNetError catch (e) {
+      hiPrint(e);
       showWarnToast(e.message);
     }
   }
 
+  void _doLike() {}
 
-  void _doLike() {
-  }
-
-  void _doUnLike() {
-  }
+  void _doUnLike() {}
 
   void _doFavorite() async {
     try {
-      var result = await VideoDetailDao.favorite(video!.vid, !videoDetail!.isFavorite);
+      var result =
+          await VideoDetailDao.favorite(video!.vid, !videoDetail!.isFavorite);
       hiPrint(result);
       videoDetail!.isFavorite = !videoDetail!.isFavorite;
       if (videoDetail!.isFavorite) {
