@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bilibili/model/video.dart';
+import 'package:flutter_bilibili/http/core/hi_error.dart';
+import 'package:flutter_bilibili/http/dao/video_detail_dao.dart';
+import 'package:flutter_bilibili/model/index.dart';
 import 'package:flutter_bilibili/util/hi_functions.dart';
 import 'package:flutter_bilibili/util/hi_types.dart';
 import 'package:flutter_bilibili/widget/expandable_content.dart';
@@ -23,12 +25,14 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     with TickerProviderStateMixin {
   late TabController _controller;
   List tabs = ['简介', '评论288'];
+  VideoDetail? videoDetail;
 
   @override
   void initState() {
     super.initState();
     changeStatusBar(color: Colors.black, statusStyle: StatusStyle.light);
     _controller = TabController(length: tabs.length, vsync: this);
+    _loadDetail();
   }
 
   @override
@@ -143,4 +147,20 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   }
 
   //buildVideoList() {}
+
+  void _loadDetail() async {
+    try {
+      VideoDetail result = await VideoDetailDao.get(widget.video.vid);
+      setState(() {
+        videoDetail = result;
+      });
+    } on NeedAuth catch (e) {
+      hiPrint(e);
+      showWarnToast(e.message);
+    } on HiNetError catch(e) {
+            hiPrint(e);
+      showWarnToast(e.message);
+    }
+  }
+
 }

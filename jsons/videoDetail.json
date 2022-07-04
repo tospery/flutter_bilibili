@@ -1,0 +1,6 @@
+{
+    "isFavorite": false,
+    "isLike": false,
+    "videoInfo": "$video",
+    "videoList": "$[]video"
+}
