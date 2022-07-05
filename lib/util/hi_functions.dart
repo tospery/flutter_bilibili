@@ -121,7 +121,7 @@ BoxDecoration? bottomBoxShadow() {
     color: Colors.white,
     boxShadow: [BoxShadow(
       color: Colors.grey[100]!,
-      offset: Offset(0, 5),
+      offset: const Offset(0, 5),
       blurRadius: 5.0,
       spreadRadius: 1
     )],
