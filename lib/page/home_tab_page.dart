@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart' hide Banner;
 import 'package:flutter_bilibili/core/hi_base_tab_state.dart';
 import 'package:flutter_bilibili/http/dao/home_dao.dart';
-import 'package:flutter_bilibili/model/banner.dart';
 import 'package:flutter_bilibili/model/index.dart';
 import 'package:flutter_bilibili/util/hi_functions.dart';
 import 'package:flutter_bilibili/widget/hi_banner.dart';
@@ -67,7 +66,7 @@ class _HomeTabPageState
 
   @override
   List<Video> parseList(Home result) {
-    return result.videoList ?? [];
+    return result.videoList;
   }
 }
 

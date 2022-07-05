@@ -142,10 +142,10 @@ class _HomePageState extends HiState<HomePage>
       Home result = await HomeDao.get('推荐');
       hiPrint('loadData():$result');
       _controller =
-          TabController(length: result.categoryList?.length ?? 0, vsync: this);
+          TabController(length: result.categoryList.length, vsync: this);
       setState(() {
-        categoryList = result.categoryList ?? [];
-        bannerList = result.bannerList ?? [];
+        categoryList = result.categoryList;
+        bannerList = result.bannerList;
         _isLoading = false;
       });
     } on NeedAuth catch (e) {

@@ -8,9 +8,9 @@ part 'home.g.dart';
 class Home {
   Home();
 
-  List<Banner>? bannerList;
-  List<Category>? categoryList;
-  List<Video>? videoList;
+  late List<Banner> bannerList;
+  late List<Category> categoryList;
+  late List<Video> videoList;
   
   factory Home.fromJson(Map<String,dynamic> json) => _$HomeFromJson(json);
   Map<String, dynamic> toJson() => _$HomeToJson(this);
