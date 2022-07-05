@@ -115,3 +115,15 @@ SizedBox hiSpace({double width = 1, double height = 1}) {
     height: height,
   );
 }
+
+BoxDecoration? bottomBoxShadow() {
+  return BoxDecoration(
+    color: Colors.white,
+    boxShadow: [BoxShadow(
+      color: Colors.grey[100]!,
+      offset: Offset(0, 5),
+      blurRadius: 5.0,
+      spreadRadius: 1
+    )],
+  );
+}

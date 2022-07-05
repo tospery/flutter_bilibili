@@ -100,7 +100,7 @@ class _HomePageState extends HiState<HomePage>
               statusStyle: StatusStyle.dark,
             ),
             Container(
-              color: Colors.white,
+              decoration: bottomBoxShadow(),
               child: _tabBar(),
             ),
             Flexible(
