@@ -27,3 +27,9 @@ const MaterialColor white = MaterialColor(
     900: Color(0xFFFFFFFF),
   },
 );
+
+class HiColor {
+  static const Color red = Color(0xFFFF4759);
+  static const Color darkRed = Color(0xFFE03E4E);
+  static const Color darkBg = Color(0xFF18191A);
+}
