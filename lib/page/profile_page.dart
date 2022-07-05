@@ -4,6 +4,7 @@ import 'package:flutter_bilibili/http/dao/profile_dao.dart';
 import 'package:flutter_bilibili/model/index.dart';
 import 'package:flutter_bilibili/util/hi_functions.dart';
 import 'package:flutter_bilibili/widget/hi_blur.dart';
+import 'package:flutter_bilibili/widget/hi_flexible_header.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -86,15 +87,6 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
     if (_profile == null) {
       return Container();
     }
-    return Row(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(23),
-          child: cachedImage(_profile!.face, width: 46, height: 46),
-        ),
-        hiSpace(width: 8),
-        Text(_profile!.name, style: const TextStyle(fontSize: 12, color: Colors.black54),)
-      ],
-    );
+    return HiFlexibleHeader(name: _profile!.name, face: _profile!.face, controller: _controller);
   }
 }

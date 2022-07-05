@@ -74,9 +74,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                       controller: _controller,
                       children: [
                         _buildDetailList(),
-                        Container(
-                          child: const Text('敬请期待...'),
-                        )
+                        const Text('敬请期待...')
                       ],
                     ),
                   ),
@@ -134,13 +132,6 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       children: [
         ...buildContents(),
         ...buildVideoList(),
-        // Container(
-        //   height: 500,
-        //   margin: const EdgeInsets.only(top: 10),
-        //   alignment: Alignment.topLeft,
-        //   decoration: const BoxDecoration(color: Colors.lightBlueAccent),
-        //   child: const Text('展开列表'),
-        // ),
       ],
     );
   }
