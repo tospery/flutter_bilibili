@@ -3,6 +3,7 @@ import 'package:flutter_bilibili/http/core/hi_error.dart';
 import 'package:flutter_bilibili/http/dao/profile_dao.dart';
 import 'package:flutter_bilibili/model/index.dart';
 import 'package:flutter_bilibili/util/hi_functions.dart';
+import 'package:flutter_bilibili/widget/hi_blur.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -31,19 +32,6 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    //     changeStatusBar(color: Colors.transparent); //fix Android切换 profile页面状态栏变白问题
-    // return Scaffold(
-    //   body: NestedScrollView(
-    //     controller: _controller,
-    //     headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-    //       return <Widget>[_buildAppBar()];
-    //     },
-    //     body: ListView(
-    //       padding: EdgeInsets.only(top: 10),
-    //       children: [..._buildContentList()],
-    //     ),
-    //   ),
-    // );
     //fix Android切换 profile页面状态栏变白问题
     changeStatusBar(color: Colors.transparent);
     return Scaffold(
@@ -84,8 +72,11 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
           collapseMode: CollapseMode.parallax,
           titlePadding: const EdgeInsets.only(left: 0),
           title: _buildHead(),
-          background: Container(
-            color: Colors.deepOrangeAccent,
+          background: Stack(
+            children: [
+              Positioned.fill(child: cachedImage('https://www.devio.org/img/beauty_camera/beauty_camera4.jpg')),
+              const Positioned.fill(child: HiBlur(sigma: 20,))
+            ],
           ),
         ),
       );
