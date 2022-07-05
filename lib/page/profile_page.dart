@@ -3,6 +3,7 @@ import 'package:flutter_bilibili/http/core/hi_error.dart';
 import 'package:flutter_bilibili/http/dao/profile_dao.dart';
 import 'package:flutter_bilibili/model/index.dart';
 import 'package:flutter_bilibili/util/hi_functions.dart';
+import 'package:flutter_bilibili/widget/hi_banner.dart';
 import 'package:flutter_bilibili/widget/hi_blur.dart';
 import 'package:flutter_bilibili/widget/hi_flexible_header.dart';
 
@@ -43,9 +44,10 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
             _buildAppBar(),
           ];
         },
-        body: ListView.builder(itemBuilder: (BuildContext context, int index){
-          return ListTile(title: Text('标题$index'),);
-        }),
+        body: ListView(
+          padding: const EdgeInsets.only(top: 10),
+          children: [...buildContentList()],
+        ),
       ),
     );
   }
@@ -76,7 +78,8 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
           background: Stack(
             children: [
               Positioned.fill(child: cachedImage('https://www.devio.org/img/beauty_camera/beauty_camera4.jpg')),
-              const Positioned.fill(child: HiBlur(sigma: 20,))
+              const Positioned.fill(child: HiBlur(sigma: 20,)),
+              Positioned(child: _buildProfileTab(), left: 0, right: 0, bottom: 0,),
             ],
           ),
         ),
@@ -89,4 +92,48 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
     }
     return HiFlexibleHeader(name: _profile!.name, face: _profile!.face, controller: _controller);
   }
+  
+  buildContentList() {
+    if (_profile == null) {
+      return [];
+    }
+    return [
+      _buildBanner(),
+    ];
+  }
+  
+  _buildProfileTab() {
+    if (_profile == null) {
+      return Container();
+    }
+    var profile = _profile!;
+    return Container(
+      padding: const EdgeInsets.only(top: 5, bottom: 5),
+      decoration: const BoxDecoration(color: Colors.white54),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children:[
+          _buildIconText('收藏', profile.favorite),
+          _buildIconText('点赞', profile.like),
+          _buildIconText('浏览', profile.browsing),
+          _buildIconText('金币', profile.coin),
+          _buildIconText('粉丝', profile.fans),
+        ]
+      ),
+    );
+  }
+  
+  _buildBanner() {
+      return HiBanner(_profile!.bannerList, bannerHeight: 120, padding: const EdgeInsets.only(left: 10, right: 10),);
+  }
+
+  _buildIconText(String text, int count) {
+    return Column(
+      children: [
+        Text('$count', style: const TextStyle(fontSize: 15, color: Colors.black87),),
+        Text(text, style: TextStyle(fontSize: 12, color: Colors.grey[600]),)
+      ],
+    );
+  }
+
 }
