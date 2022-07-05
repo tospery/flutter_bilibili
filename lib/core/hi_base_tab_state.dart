@@ -7,25 +7,26 @@ import 'package:flutter_bilibili/util/hi_functions.dart';
 ///通用底层带分页和刷新的页面框架
 ///M为Dao返回数据模型，L为列表数据模型，T为具体widget
 abstract class HiBaseTabState<M, L, T extends StatefulWidget> extends HiState<T>
-with AutomaticKeepAliveClientMixin
- {
+    with AutomaticKeepAliveClientMixin {
   List<L> dataList = [];
   int pageIndex = 1;
   bool loading = false;
   ScrollController scrollController = ScrollController();
 
   get contentChild;
-    ///获取对应页码的数据
-  Future<M> getData(int pageIndex);
-  ///从MO中解析出list数据
-  List<L> parseList(M result);
 
   @override
   void initState() {
     super.initState();
-    scrollController.addListener(() { 
-      var dis = scrollController.position.maxScrollExtent - scrollController.position.pixels;
-      if (dis < 300 && !loading && scrollController.position.maxScrollExtent != 0) {
+    scrollController.addListener(() {
+      var dis = scrollController.position.maxScrollExtent -
+          scrollController.position.pixels;
+      //当距离底部不足300时加载更多
+      if (dis < 300 &&
+          !loading &&
+          //fix 当列表高度不满屏幕高度时不执行加载更多
+          scrollController.position.maxScrollExtent != 0) {
+        hiPrint('------_loadData---');
         loadData(loadMore: true);
       }
     });
@@ -34,8 +35,8 @@ with AutomaticKeepAliveClientMixin
 
   @override
   void dispose() {
-    scrollController.dispose();
     super.dispose();
+    scrollController.dispose();
   }
 
   @override
@@ -44,10 +45,17 @@ with AutomaticKeepAliveClientMixin
     return RefreshIndicator(
       onRefresh: loadData,
       color: primary,
-      child: MediaQuery.removePadding(removeTop: true, context: context, child: contentChild),
+      child: MediaQuery.removePadding(
+          removeTop: true, context: context, child: contentChild),
     );
   }
-  
+
+  ///获取对应页码的数据
+  Future<M> getData(int pageIndex);
+
+  ///从MO中解析出list数据
+  List<L> parseList(M result);
+
   Future<void> loadData({loadMore = false}) async {
     if (loading) {
       hiPrint("上次加载还没完成...");
@@ -86,7 +94,6 @@ with AutomaticKeepAliveClientMixin
     }
   }
 
-    @override
+  @override
   bool get wantKeepAlive => true;
-
 }
