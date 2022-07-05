@@ -19,8 +19,8 @@ class _RankingTabPageState extends HiBaseTabState<Ranking, Video, RankingTabPage
   @override
   get contentChild => Container(
     child: ListView.builder(
-      physics: AlwaysScrollableScrollPhysics(),
-      padding: EdgeInsets.only(top: 10),
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 10),
       itemCount: dataList.length,
       controller: scrollController,
       itemBuilder: (BuildContext context, int index) => VideoLargeCard(video: dataList[index])

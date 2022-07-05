@@ -1,0 +1,6 @@
+{
+    "name":"移动端架构师",
+    "cover":"https://o.devio.org/images/fa/banner/mobilearchitect.png",
+    "url":"https://class.imooc.com/sale/mobilearchitect",
+    "@JsonKey(name: 'group') late int": "group"
+}

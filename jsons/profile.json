@@ -1,0 +1,12 @@
+{
+    "name":"tospery",
+    "face":"https://o.devio.org/images/other/fa_avatar.png",
+    "@JsonKey(name: 'fans') late int": "fans",
+    "@JsonKey(name: 'favorite') late int": "favorite",
+    "@JsonKey(name: 'like') late int": "like",
+    "@JsonKey(name: 'coin') late int": "coin",
+    "@JsonKey(name: 'browsing') late int": "browsing",
+    "bannerList": "$[]Banner",
+    "courseList": "$[]Course",
+    "benefitList": "$[]Benefit"
+}
