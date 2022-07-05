@@ -3,6 +3,7 @@ import 'package:flutter_bilibili/http/core/hi_error.dart';
 import 'package:flutter_bilibili/http/dao/profile_dao.dart';
 import 'package:flutter_bilibili/model/index.dart';
 import 'package:flutter_bilibili/util/hi_functions.dart';
+import 'package:flutter_bilibili/widget/course_card.dart';
 import 'package:flutter_bilibili/widget/hi_banner.dart';
 import 'package:flutter_bilibili/widget/hi_blur.dart';
 import 'package:flutter_bilibili/widget/hi_flexible_header.dart';
@@ -99,6 +100,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
     }
     return [
       _buildBanner(),
+      CourseCard(courseList: _profile!.courseList),
     ];
   }
   
