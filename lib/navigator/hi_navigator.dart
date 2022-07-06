@@ -72,6 +72,19 @@ class HiNavigator extends _RouteJumpListener {
 
   HiNavigator._();
 
+  RouteStatusInfo? getCurrent() {
+    return _current;
+  }
+
+  //   Future<bool> openH5(String url) async {
+  //   var result = await canLaunch(url);
+  //   if (result) {
+  //     return await launch(url);
+  //   } else {
+  //     return Future.value(false);
+  //   }
+  // }
+  
   void onBottomTabChange(int index, Widget page) {
     _bottomTab = RouteStatusInfo(RouteStatus.home, page);
     _notify(_bottomTab!);

@@ -4,8 +4,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bilibili/navigator/hi_navigator.dart';
+import 'package:flutter_bilibili/page/profile_page.dart';
+import 'package:flutter_bilibili/page/video_detail_page.dart';
+import 'package:flutter_bilibili/provider/theme_provider.dart';
+import 'package:flutter_bilibili/util/color.dart';
 import 'package:flutter_bilibili/util/hi_types.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+// ignore: depend_on_referenced_packages
+import 'package:provider/provider.dart';
 
 void hiPrint(log, {String? tag}) {
   if (kDebugMode) {
@@ -35,21 +42,41 @@ void showToast(String text) {
 }
 
 void changeStatusBar(
-    {Color color = Colors.white,
-    StatusStyle statusStyle = StatusStyle.dark,
-    BuildContext? context}) {
+    {color = Colors.white,
+      StatusStyle statusStyle = StatusStyle.dark,
+      BuildContext? context}) {
+  if (context != null) {
+    //fix Tried to listen to a value exposed with provider, from outside of the widget tree.
+    var themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    if (themeProvider.isDark()) {
+      statusStyle = StatusStyle.light;
+      color = HiColor.darkBg;
+    }
+  }
+  var page = HiNavigator.getInstance().getCurrent()?.page;
+  //fix Android切换 profile页面状态栏变白问题
+  if (page is ProfilePage) {
+    color = Colors.transparent;
+  } else if (page is VideoDetailPage) {
+    color = Colors.black;
+    statusStyle = StatusStyle.light;
+  }
+  //沉浸式状态栏样式
   Brightness brightness;
   if (Platform.isIOS) {
-    brightness =
-        statusStyle == StatusStyle.light ? Brightness.dark : Brightness.light;
+    brightness = statusStyle == StatusStyle.light
+        ? Brightness.dark
+        : Brightness.light;
   } else {
-    brightness =
-        statusStyle == StatusStyle.light ? Brightness.light : Brightness.dark;
+    brightness = statusStyle == StatusStyle.light
+        ? Brightness.light
+        : Brightness.dark;
   }
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-      statusBarColor: Colors.transparent,
-      statusBarBrightness: brightness,
-      statusBarIconBrightness: brightness));
+    statusBarColor: Colors.transparent,
+    statusBarBrightness: brightness,
+    statusBarIconBrightness: brightness,
+  ));
 }
 
 String durationTransform(int seconds) {
@@ -116,14 +143,17 @@ SizedBox hiSpace({double width = 1, double height = 1}) {
   );
 }
 
-BoxDecoration? bottomBoxShadow() {
-  return BoxDecoration(
-    color: Colors.white,
-    boxShadow: [BoxShadow(
-      color: Colors.grey[100]!,
-      offset: const Offset(0, 5),
-      blurRadius: 5.0,
-      spreadRadius: 1
-    )],
-  );
+BoxDecoration? bottomBoxShadow(BuildContext context) {
+  var themeProvider = context.watch<ThemeProvider>();
+  if (themeProvider.isDark()) {
+    return null;
+  }
+  return BoxDecoration(color: Colors.white, boxShadow: [
+    BoxShadow(
+        color: Colors.grey[100]!,
+        offset: const Offset(0, 5), //xy轴偏移
+        blurRadius: 5.0, //阴影模糊程度
+        spreadRadius: 1 //阴影扩散程度
+        )
+  ]);
 }
