@@ -4,6 +4,7 @@ import 'package:flutter_bilibili/http/dao/login_dao.dart';
 import 'package:flutter_bilibili/model/video.dart';
 import 'package:flutter_bilibili/navigator/bottom_navigator.dart';
 import 'package:flutter_bilibili/navigator/hi_navigator.dart';
+import 'package:flutter_bilibili/page/dark_mode_page.dart';
 import 'package:flutter_bilibili/page/login_page.dart';
 import 'package:flutter_bilibili/page/registration_page.dart';
 import 'package:flutter_bilibili/page/video_detail_page.dart';
@@ -111,6 +112,8 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
       page = wrapPage(const RegistrationPage());
     } else if (routeStatus == RouteStatus.login) {
       page = wrapPage(const LoginPage());
+    } else if (routeStatus == RouteStatus.darkMode) {
+      page = wrapPage(const DarkModePage());
     }
     //重新创建一个数组，否则pages因引用没有改变路由不会生效
     tempPages = [...tempPages, page];
