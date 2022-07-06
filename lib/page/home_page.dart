@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart' hide Banner;
 import 'package:flutter_bilibili/http/core/hi_error.dart';
 import 'package:flutter_bilibili/http/dao/home_dao.dart';
@@ -208,9 +210,14 @@ class _HomePageState extends HiState<HomePage>
               ),
             ),
           ),
-          const Icon(
-            Icons.explore_outlined,
-            color: Colors.grey,
+          InkWell(
+            onTap: () {
+              _mockCrash();
+            },
+            child: Icon(
+              Icons.explore_outlined,
+              color: Colors.grey,
+            ),
           ),
           const Padding(
             padding: EdgeInsets.only(left: 12),
@@ -222,5 +229,36 @@ class _HomePageState extends HiState<HomePage>
         ],
       ),
     );
+  }
+  
+  void _mockCrash() {
+    // //使用try-catch捕获同步异常
+    // try {
+    //   throw StateError('This is a dart exception.');
+    // } catch (e) {
+    //   print(e);
+    // }
+    // //使用catchError捕获异步异常
+    // Future.delayed(Duration(seconds: 1))
+    //     .then((value) =>
+    //         throw StateError('This is first Dart exception in Future.'))
+    //     .catchError((e) => print(e));
+
+    // try {
+    //   await Future.delayed(Duration(seconds: 1))
+    //       .then((value) =>
+    //           throw StateError('This is second Dart exception in Future.'))
+    //       .catchError((e) => print(e));
+    // } catch (e) {
+    //   print(e);
+    // }
+    // runZonedGuarded(() {
+    //   throw StateError('runZonedGuarded:This is a dart exception.');
+    // }, (e, s) => print(e));
+    // runZonedGuarded(() {
+    //   Future.delayed(Duration(seconds: 1)).then((value) => throw StateError(
+    //       'runZonedGuarded:This is first Dart exception in Future.'));
+    // }, (e, s) => print(e));
+    // throw StateError('main:This is second Dart exception.');
   }
 }
