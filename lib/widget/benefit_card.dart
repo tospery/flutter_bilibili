@@ -13,7 +13,7 @@ class BenefitCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 10, right: 5, top: 15),
+      padding: const EdgeInsets.only(left: 10, right: 5, top: 15),
       child: Column(
         children: [_buildTitle(), _buildBenefit(context)],
       ),
@@ -22,10 +22,10 @@ class BenefitCard extends StatelessWidget {
 
   _buildTitle() {
     return Container(
-        padding: EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.only(bottom: 10),
         child: Row(
           children: [
-            Text('增值服务',
+            const Text('增值服务',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             hiSpace(width: 10),
             Text(
@@ -40,24 +40,24 @@ class BenefitCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         //todo
-        print('复制到剪切板与打开H5');
+        hiPrint('复制到剪切板与打开H5');
       },
       child: Padding(
-        padding: EdgeInsets.only(right: 5),
+        padding: const EdgeInsets.only(right: 5),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(5),
           child: Container(
             alignment: Alignment.center,
             width: width,
             height: 60,
-            decoration: BoxDecoration(color: Colors.redAccent),
+            decoration: const BoxDecoration(color: Colors.redAccent),
             child: Stack(
               children: [
-                Positioned.fill(child: HiBlur()),
+                const Positioned.fill(child: HiBlur()),
                 Positioned.fill(
                     child: Center(
                         child: Text(mo.name,
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                             textAlign: TextAlign.center)))
               ],
             ),

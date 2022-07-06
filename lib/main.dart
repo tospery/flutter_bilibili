@@ -7,9 +7,11 @@ import 'package:flutter_bilibili/navigator/hi_navigator.dart';
 import 'package:flutter_bilibili/page/login_page.dart';
 import 'package:flutter_bilibili/page/registration_page.dart';
 import 'package:flutter_bilibili/page/video_detail_page.dart';
+import 'package:flutter_bilibili/provider/hi_provider.dart';
 import 'package:flutter_bilibili/provider/theme_provider.dart';
-import 'package:flutter_bilibili/util/color.dart';
 import 'package:flutter_bilibili/util/hi_functions.dart';
+// ignore: depend_on_referenced_packages
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const BiliApp());
@@ -27,20 +29,29 @@ class _BiliAppState extends State<BiliApp> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: HiCache.preInit(),
-        builder: (context, snapshot) {
-          var widget = snapshot.connectionState == ConnectionState.done
-              ? Router(routerDelegate: _routeDelegate)
-              : const Scaffold(
-                  body: Center(child: CircularProgressIndicator()),
-                );
-          return MaterialApp(
-            home: widget,
-         theme: ThemeProvider().getTheme(),
-                    darkTheme: ThemeProvider().getTheme(isDarkMode: true),
-                    themeMode: ThemeProvider().getThemeMode(),
-          );
-        });
+      future: HiCache.preInit(),
+      builder: (context, snapshot) {
+        var widget = snapshot.connectionState == ConnectionState.done
+            ? Router(routerDelegate: _routeDelegate)
+            : const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+        return MultiProvider(
+          providers: topProviders,
+          child: Consumer<ThemeProvider>(
+            builder: (BuildContext context, ThemeProvider themeProvider,
+                Widget? child) {
+              return MaterialApp(
+                home: widget,
+                theme: themeProvider.getTheme(),
+                darkTheme: themeProvider.getTheme(isDarkMode: true),
+                themeMode: themeProvider.getThemeMode(),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 }
 
