@@ -8,12 +8,15 @@ import 'package:flutter_bilibili/navigator/hi_navigator.dart';
 import 'package:flutter_bilibili/page/home_tab_page.dart';
 import 'package:flutter_bilibili/page/profile_page.dart';
 import 'package:flutter_bilibili/page/video_detail_page.dart';
+import 'package:flutter_bilibili/provider/theme_provider.dart';
 import 'package:flutter_bilibili/util/hi_functions.dart';
 import 'package:flutter_bilibili/util/hi_types.dart';
 import 'package:flutter_bilibili/widget/hi_tab.dart';
 import 'package:flutter_bilibili/widget/loading_container.dart';
 import 'package:flutter_bilibili/widget/navigation_bar.dart';
 import 'package:flutter_bilibili/core/hi_state.dart';
+// ignore: depend_on_referenced_packages
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   // final ValueChanged<int>? onJumpTo;
@@ -64,7 +67,7 @@ class _HomePageState extends HiState<HomePage>
     context.read<ThemeProvider>().darModeChange();
     super.didChangePlatformBrightness();
   }
-  
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);

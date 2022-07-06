@@ -5,6 +5,7 @@ import 'package:flutter_bilibili/model/index.dart';
 import 'package:flutter_bilibili/util/hi_functions.dart';
 import 'package:flutter_bilibili/widget/benefit_card.dart';
 import 'package:flutter_bilibili/widget/course_card.dart';
+import 'package:flutter_bilibili/widget/dark_mode_item.dart';
 import 'package:flutter_bilibili/widget/hi_banner.dart';
 import 'package:flutter_bilibili/widget/hi_blur.dart';
 import 'package:flutter_bilibili/widget/hi_flexible_header.dart';
@@ -103,6 +104,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
       _buildBanner(),
       CourseCard(courseList: _profile!.courseList),
       BenefitCard(benefitList: _profile!.benefitList),
+      const DarkModelItem(),
     ];
   }
   

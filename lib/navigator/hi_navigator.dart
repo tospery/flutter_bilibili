@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bilibili/navigator/bottom_navigator.dart';
+import 'package:flutter_bilibili/page/dark_mode_page.dart';
 import 'package:flutter_bilibili/page/login_page.dart';
 import 'package:flutter_bilibili/page/registration_page.dart';
 import 'package:flutter_bilibili/page/video_detail_page.dart';
@@ -11,7 +12,7 @@ wrapPage(Widget child) {
   return MaterialPage(key: ValueKey(child.hashCode), child: child);
 }
 
-enum RouteStatus { login, registration, home, detail, unknown }
+enum RouteStatus { login, registration, home, detail, unknown, darkMode }
 
 RouteStatus getStatus(MaterialPage page) {
   if (page.child is LoginPage) {
@@ -22,6 +23,8 @@ RouteStatus getStatus(MaterialPage page) {
     return RouteStatus.home;
   } else if (page.child is VideoDetailPage) {
     return RouteStatus.detail;
+  } else if (page.child is DarkModePage) {
+    return RouteStatus.darkMode;
   } else {
     return RouteStatus.unknown;
   }
