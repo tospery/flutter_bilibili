@@ -60,6 +60,12 @@ class _HomePageState extends HiState<HomePage>
   }
 
   @override
+  void didChangePlatformBrightness() {
+    context.read<ThemeProvider>().darModeChange();
+    super.didChangePlatformBrightness();
+  }
+  
+  @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     HiNavigator.getInstance().removeListener(listener);
