@@ -12,7 +12,6 @@ import 'package:flutter_bilibili/widget/login_input.dart';
 import 'package:provider/provider.dart';
 
 class RegistrationPage extends StatefulWidget {
-
   const RegistrationPage({super.key});
 
   @override
@@ -31,8 +30,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myappBar('注册', '登录', (){
-        context.read<ThemeProvider>().setTheme(ThemeMode.light);
+      appBar: myappBar('注册', '登录', () {
+        // context.read<ThemeProvider>().setTheme(ThemeMode.light);
         HiNavigator.getInstance().onJumpTo(RouteStatus.login);
       }),
       body: ListView(
@@ -96,7 +95,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-            child: LoginButton('注册', enable: loginEnable, onPressed: checkParams,),
+            child: LoginButton(
+              '注册',
+              enable: loginEnable,
+              onPressed: checkParams,
+            ),
           )
         ],
       ),

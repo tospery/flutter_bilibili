@@ -12,7 +12,6 @@ import 'package:flutter_bilibili/widget/login_input.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
-
   const LoginPage({super.key});
 
   @override
@@ -28,8 +27,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myappBar('密码登录', '注册', (){
-        context.read<ThemeProvider>().setTheme(ThemeMode.dark);
+      appBar: myappBar('密码登录', '注册', () {
+        // context.read<ThemeProvider>().setTheme(ThemeMode.dark);
         HiNavigator.getInstance().onJumpTo(RouteStatus.registration);
       }),
       body: ListView(

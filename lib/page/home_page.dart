@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart' hide Banner;
 import 'package:flutter_bilibili/http/core/hi_error.dart';
 import 'package:flutter_bilibili/http/dao/home_dao.dart';
@@ -214,7 +212,7 @@ class _HomePageState extends HiState<HomePage>
             onTap: () {
               _mockCrash();
             },
-            child: Icon(
+            child: const Icon(
               Icons.explore_outlined,
               color: Colors.grey,
             ),
@@ -230,7 +228,7 @@ class _HomePageState extends HiState<HomePage>
       ),
     );
   }
-  
+
   void _mockCrash() {
     // //使用try-catch捕获同步异常
     // try {
