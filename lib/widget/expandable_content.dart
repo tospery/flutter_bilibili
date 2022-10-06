@@ -22,8 +22,8 @@ class _ExpandableContentState extends State<ExpandableContent>
   @override
   void initState() {
     super.initState();
-    _controller =
-        AnimationController(duration: const Duration(microseconds: 200), vsync: this);
+    _controller = AnimationController(
+        duration: const Duration(microseconds: 200), vsync: this);
     _heightFactor = _controller.drive(_easeInTween);
     _controller.addListener(() {
       hiPrint(_heightFactor.value);
@@ -38,19 +38,6 @@ class _ExpandableContentState extends State<ExpandableContent>
 
   @override
   Widget build(BuildContext context) {
-    //     return Container(
-    //   padding: EdgeInsets.only(left: 15, right: 15, top: 5),
-    //   child: Column(
-    //     children: [
-    //       _buildTitle(),
-    //       Padding(
-    //         padding: EdgeInsets.only(bottom: 8),
-    //       ),
-    //       _buildInfo(),
-    //       _buildDes()
-    //     ],
-    //   ),
-    // );
     return Container(
       padding: const EdgeInsets.only(
         left: 15,
@@ -96,30 +83,44 @@ class _ExpandableContentState extends State<ExpandableContent>
 
   _buildInfo() {
     var style = const TextStyle(fontSize: 12, color: Colors.grey);
-    var dateStr = widget.video.createTime.length > 10 ? widget.video.createTime.substring(5, 10) : widget.video.createTime;
+    var dateStr = widget.video.createTime.length > 10
+        ? widget.video.createTime.substring(5, 10)
+        : widget.video.createTime;
     return Row(
       children: [
         ...smallIconText(Icons.ondemand_video, widget.video.view),
         const Padding(padding: EdgeInsets.only(left: 10)),
         ...smallIconText(Icons.list_alt, widget.video.reply),
-        Text('    $dateStr', style: style,)
+        Text(
+          '    $dateStr',
+          style: style,
+        )
       ],
     );
   }
 
   _buildDes() {
-    var child = _expand ? Text(widget.video.desc, style: const TextStyle(fontSize: 12, color: Colors.grey),) : null;
-    return AnimatedBuilder(animation: _controller.view, child: child, builder: (BuildContext context, Widget? child){
-      return Align(
-        heightFactor: _heightFactor.value,
-        alignment: Alignment.topCenter,
-        child: Container(
-          alignment: Alignment.topLeft,
-          padding: const EdgeInsets.only(top: 8),
-          child: child,
-        ),
-      );
-    });
+    var child = _expand
+        ? Text(
+            widget.video.desc,
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
+          )
+        : null;
+    return AnimatedBuilder(
+      animation: _controller.view,
+      child: child,
+      builder: (BuildContext context, Widget? child) {
+        return Align(
+          heightFactor: _heightFactor.value,
+          alignment: Alignment.topCenter,
+          child: Container(
+            alignment: Alignment.topLeft,
+            padding: const EdgeInsets.only(top: 8),
+            child: child,
+          ),
+        );
+      },
+    );
   }
 
   void _toggleExpand() {
