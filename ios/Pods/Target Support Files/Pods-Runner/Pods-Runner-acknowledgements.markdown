@@ -286,7 +286,7 @@ SOFTWARE.
    limitations under the License.
 
 
-## path_provider_ios
+## path_provider_foundation
 
 Copyright 2013 The Flutter Authors. All rights reserved.
 
@@ -315,7 +315,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-## shared_preferences_ios
+## shared_preferences_foundation
 
 Copyright 2013 The Flutter Authors. All rights reserved.
 
@@ -348,7 +348,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 BSD 2-Clause License
 
-Copyright (c) 2019, Tekartik
+Copyright (c) 2019, Alexandre Roux Tekartik
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
