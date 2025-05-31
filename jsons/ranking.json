@@ -1,4 +1,0 @@
-{
-    "@JsonKey(name: 'total') late int": "total",
-    "list": "$[]Video"
-}
