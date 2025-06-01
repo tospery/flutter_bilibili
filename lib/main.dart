@@ -36,7 +36,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Future<void> _incrementCounter() async {
     TestRequest request = TestRequest();
-    request.add("aa", "ddd").add("bb", "333");
+    request.add("aa", "ddd").add("bb", "333").add("requestPrams", "aa111");
     try {
       var result = await HiNet.getInstance().fire(request);
       print(result);

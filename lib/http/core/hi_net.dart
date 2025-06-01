@@ -1,6 +1,6 @@
+import 'dio_adapter.dart';
 import 'hi_error.dart';
 import 'hi_net_adapter.dart';
-import 'mock_adapter.dart';
 import '../request/base_request.dart';
 
 class HiNet {
@@ -47,7 +47,7 @@ class HiNet {
 
   Future<dynamic> send(BaseRequest request) async {
     printLog('url: ${request.url()}');
-    MockAdapter adapter = MockAdapter();
+    DioAdapter adapter = DioAdapter();
     return adapter.send(request);
   }
 
