@@ -1,3 +1,6 @@
+import 'hi_error.dart';
+import 'hi_net_adapter.dart';
+import 'mock_adapter.dart';
 import '../request/base_request.dart';
 
 class HiNet {
@@ -11,24 +14,45 @@ class HiNet {
   HiNet._();
 
   Future fire(BaseRequest request) async {
-    var response = await send(request);
-    var result = response['data'];
+    HiNetResponse? response;
+    Object? error;
+    try {
+      response = await send(request);
+    } on HiNetError catch (e) {
+      error = e;
+      response = e.data;
+      printLog(e.message);
+    } catch (e) {
+      error = e;
+      printLog(e);
+    }
+
+    if (response == null) {
+      printLog(error);
+    }
+    var result = response?.data;
     printLog(result);
-    return result;
+    var status = response?.statusCode;
+    switch (status) {
+      case 200:
+        return result;
+      case 401:
+        throw NeedLogin();
+      case 403:
+        throw NeedAuth(result.toString(), data: result);
+      default:
+        throw HiNetError(status ?? -1, result.toString(), data: result);
+    }
   }
 
   Future<dynamic> send(BaseRequest request) async {
     printLog('url: ${request.url()}');
-    printLog('method: ${request.httpMethod()}');
-    request.addHeader("token", "123");
-    printLog('header: ${request.header}');
-    return Future.value({
-      "statusCode": 200,
-      "data": {"code": 0, "message": "success"},
-    });
+    MockAdapter adapter = MockAdapter();
+    return adapter.send(request);
   }
 
   void printLog(log) {
+    // ignore: avoid_print
     print('HiNet: $log');
   }
 }
