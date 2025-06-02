@@ -46,7 +46,7 @@ class HiNet {
   }
 
   Future<dynamic> send(BaseRequest request) async {
-    printLog('url: ${request.url()}');
+    printLog('url: ${request.urlString()}');
     DioAdapter adapter = DioAdapter();
     return adapter.send(request);
   }

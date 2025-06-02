@@ -11,16 +11,16 @@ class DioAdapter extends HiNetAdapter {
     var options = Options(headers: request.header);
     try {
       if (request.httpMethod() == HttpMethod.get) {
-        response = await Dio().get(request.url(), options: options);
+        response = await Dio().get(request.urlString(), options: options);
       } else if (request.httpMethod() == HttpMethod.post) {
         response = await Dio().post(
-          request.url(),
+          request.urlString(),
           data: request.parameter,
           options: options,
         );
       } else if (request.httpMethod() == HttpMethod.delete) {
         response = await Dio().delete(
-          request.url(),
+          request.urlString(),
           data: request.parameter,
           options: options,
         );

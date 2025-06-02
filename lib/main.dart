@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'http/core/hi_error.dart';
-import 'http/core/hi_net.dart';
-import 'http/request/test_request.dart';
+import 'http/dao/login_dao.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,14 +33,29 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Future<void> _incrementCounter() async {
-    TestRequest request = TestRequest();
-    request.add("aa", "ddd").add("bb", "333").add("requestPrams", "aa111");
+    // TestRequest request = TestRequest();
+    // request.add("aa", "ddd").add("bb", "333").add("requestPrams", "aa111");
+    // try {
+    //   var result = await HiNet.getInstance().fire(request);
+    //   print(result);
+    // } on NeedAuth catch (e) {
+    //   print(e);
+    // } on NeedLogin catch (e) {
+    //   print(e);
+    // } on HiNetError catch (e) {
+    //   print(e);
+    // }
+
     try {
-      var result = await HiNet.getInstance().fire(request);
+      // var result = await LoginDao.register(
+      //   'jvadd',
+      //   'ddd112222',
+      //   '123445',
+      //   '5566',
+      // );
+      var result = await LoginDao.login('jvadd', 'ddd112222');
       print(result);
     } on NeedAuth catch (e) {
-      print(e);
-    } on NeedLogin catch (e) {
       print(e);
     } on HiNetError catch (e) {
       print(e);

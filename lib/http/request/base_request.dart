@@ -1,10 +1,16 @@
+import '../../utils/hi_constants.dart';
+import '../dao/login_dao.dart';
+
 enum HttpMethod { get, post, delete }
 
 abstract class BaseRequest {
   var useHttps = true;
   var pathExtra = '';
   var parameter = <String, String>{};
-  Map<String, dynamic> header = {};
+  Map<String, dynamic> header = {
+    HiConstants.authTokenKey: HiConstants.authTokenValue,
+    HiConstants.courseFlagKey: HiConstants.courseFlagValue,
+  };
 
   String host() {
     return "api.devio.org";
@@ -14,7 +20,7 @@ abstract class BaseRequest {
   HttpMethod httpMethod();
   bool needLogin();
 
-  String url() {
+  String urlString() {
     Uri uri;
     var path = this.path() ?? '';
 
@@ -31,6 +37,9 @@ abstract class BaseRequest {
     } else {
       uri = Uri.http(host(), path, parameter);
     }
+    if (needLogin()) {
+      set(LoginDao.boardingPassKey, LoginDao.getBoardingPass());
+    }
     return uri.toString();
   }
 
@@ -39,7 +48,7 @@ abstract class BaseRequest {
     return this;
   }
 
-  BaseRequest addHeader(String k, Object? v) {
+  BaseRequest set(String k, Object? v) {
     header[k] = v.toString();
     return this;
   }
