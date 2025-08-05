@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bilibili/db/hi_cache.dart';
 import 'package:flutter_bilibili/http/core/hi_net.dart';
 import 'package:flutter_bilibili/http/request/notice_request.dart';
+import 'package:flutter_bilibili/page/registration_page.dart';
 import 'http/core/hi_error.dart';
 import 'http/dao/login_dao.dart';
 
@@ -15,34 +16,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: HiCache.preInit(),
-      builder: (context, snapshot) {
-        // if (snapshot.connectionState == ConnectionState.done) {
-        //   return _buildApp();
-        // } else {
-        //   return const MaterialApp(
-        //     home: Scaffold(
-        //       body: Center(child: CircularProgressIndicator()),
-        //     ),
-        //   );
-        // }
-        return MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          ),
-          home: const MyHomePage(title: 'Flutter Demo Home Page'),
-        );
-      },
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
+      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const RegistrationPage(),
     );
-    // return MaterialApp(
-    //   title: 'Flutter Demo',
-    //   theme: ThemeData(
-    //     colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-    //   ),
-    //   home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    // );
   }
 }
 
@@ -56,6 +37,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    HiCache.preInit();
+  }
+
   Future<void> _incrementCounter() async {
     // try {
     // var result = await HiNet.getInstance().fire(NoticeRequest());
