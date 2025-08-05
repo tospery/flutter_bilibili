@@ -1,100 +1,81 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bilibili/db/hi_cache.dart';
-import 'package:flutter_bilibili/http/core/hi_net.dart';
-import 'package:flutter_bilibili/http/request/notice_request.dart';
-import 'package:flutter_bilibili/page/login_page.dart';
-import 'package:flutter_bilibili/page/registration_page.dart';
-import 'package:flutter_bilibili/utils/color.dart';
-import 'http/core/hi_error.dart';
-import 'http/dao/login_dao.dart';
+import 'package:flutter_bilibili/model/video_model.dart';
+import 'package:flutter_bilibili/page/home_page.dart';
+import 'package:flutter_bilibili/page/video_detail_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const BiliApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class BiliApp extends StatefulWidget {
+  const BiliApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<BiliApp> createState() => _BiliAppState();
+}
+
+class _BiliAppState extends State<BiliApp> {
+  final BiliRouteDelegate _routeDelegate = BiliRouteDelegate();
   @override
   Widget build(BuildContext context) {
-    HiCache.preInit();
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: white),
-      home: const LoginPage(),
-    );
+    var widget = Router(routerDelegate: _routeDelegate);
+    return MaterialApp(home: widget);
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<BiliRoutePath> {
+  // BiliRouteDelegate() : navigatorKey = GlobalKey<NavigatorState>();
 
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  void initState() {
-    super.initState();
-    HiCache.preInit();
-  }
-
-  Future<void> _incrementCounter() async {
-    // try {
-    // var result = await HiNet.getInstance().fire(NoticeRequest());
-    // print(result);
-    // } on NeedAuth catch (e) {
-    //   print(e);
-    // } on NeedLogin catch (e) {
-    //   print(e);
-    // } on HiNetError catch (e) {
-    //   print(e);
-    // }
-
-    try {
-      // var result = await LoginDao.register(
-      //   'jvadd',
-      //   'ddd112222',
-      //   '123445',
-      //   '5566',
-      // );
-      var result = await LoginDao.login('tospery', 'abcd1234');
-      print(result);
-
-      var result2 = await HiNet.getInstance().fire(NoticeRequest());
-      print(result2);
-    } on NeedAuth catch (e) {
-      print(e);
-    } on HiNetError catch (e) {
-      print(e);
-    }
-  }
+  List<MaterialPage> pages = [];
+  VideoModel? videoModel;
+  BiliRoutePath? path;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text('2', style: Theme.of(context).textTheme.headlineMedium),
-          ],
+    pages = [
+      pageWrap(
+        HomePage(
+          onJumpToDetail: (videoModel) {
+            this.videoModel = videoModel;
+            path = BiliRoutePath.detail();
+            notifyListeners();
+          },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    ];
+    if (videoModel != null) {
+      pages.add(pageWrap(VideoDetailPage(videoModel: videoModel!)));
+    }
+    return Navigator(
+      key: navigatorKey,
+      pages: pages,
+      // ignore: deprecated_member_use
+      onPopPage: (route, result) {
+        if (!route.didPop(result)) {
+          return false;
+        }
+        return true;
+      },
     );
   }
+
+  @override
+  GlobalKey<NavigatorState>? get navigatorKey => GlobalKey<NavigatorState>();
+
+  @override
+  Future<void> setNewRoutePath(BiliRoutePath page) async {
+    path = path;
+  }
+}
+
+class BiliRoutePath {
+  final String location;
+
+  BiliRoutePath.home() : location = '/';
+  BiliRoutePath.detail() : location = '/detail';
+}
+
+pageWrap(Widget child) {
+  return MaterialPage(key: ValueKey(child.hashCode), child: child);
 }
