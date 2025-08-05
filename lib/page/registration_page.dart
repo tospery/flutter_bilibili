@@ -143,20 +143,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
         orderId ?? "",
       );
       hiPrint(result);
-      if (result['code'] == 0) {
-        // showToast('注册成功');
+      if (result["code"] == 0) {
+        showToast("注册成功");
         // HiNavigator.getInstance().onJumpTo(RouteStatus.login);
-        hiPrint("注册成功");
       } else {
-        // showWarnToast(result['msg']);
-        hiPrint(result['msg']);
+        showWarnToast(result["msg"]);
       }
     } on NeedAuth catch (e) {
-      // showWarnToast(e.message);
-      hiPrint(e.message);
+      showWarnToast(e.message);
     } on HiNetError catch (e) {
-      // showWarnToast(e.message);
-      hiPrint(e.message);
+      showWarnToast(e.message);
     }
   }
 }
