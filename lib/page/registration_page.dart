@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bilibili/http/core/hi_error.dart';
 import 'package:flutter_bilibili/http/dao/login_dao.dart';
 import 'package:flutter_bilibili/utils/hi_functions.dart';
 import 'package:flutter_bilibili/widget/app_bar.dart';
+import 'package:flutter_bilibili/widget/login_button.dart';
 import 'package:flutter_bilibili/widget/login_effect.dart';
 import 'package:flutter_bilibili/widget/login_input.dart';
 // ignore: depend_on_referenced_packages
@@ -93,12 +95,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-            child: Divider(height: 1, thickness: 0.5),
-            // child: LoginButton(
-            //   '注册',
-            //   enable: loginEnable,
-            //   onPressed: checkParams,
-            // ),
+            child: LoginButton(
+              "注册",
+              enable: loginEnable,
+              onPressed: checkParams,
+            ),
           ),
         ],
       ),
@@ -107,13 +108,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   void checkInput() {
     bool enable = false;
-    // if (isNotEmpty(username) &&
-    //     isNotEmpty(password) &&
-    //     isNotEmpty(rePassword) &&
-    //     isNotEmpty(imoocId) &&
-    //     isNotEmpty(orderId)) {
-    //   enable = true;
-    // }
+    if (isNotEmpty(username) &&
+        isNotEmpty(password) &&
+        isNotEmpty(rePassword) &&
+        isNotEmpty(imoocId) &&
+        isNotEmpty(orderId)) {
+      enable = true;
+    }
     setState(() {
       loginEnable = enable;
     });
@@ -134,24 +135,28 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   void send() async {
-    // try {
-    //   var result = await LoginDao.register(
-    //     username ?? "",
-    //     password ?? "",
-    //     imoocId ?? "",
-    //     orderId ?? "",
-    //   );
-    //   hiPrint(result);
-    //   if (result['code'] == 0) {
-    //     showToast('注册成功');
-    //     HiNavigator.getInstance().onJumpTo(RouteStatus.login);
-    //   } else {
-    //     showWarnToast(result['msg']);
-    //   }
-    // } on NeedAuth catch (e) {
-    //   showWarnToast(e.message);
-    // } on HiNetError catch (e) {
-    //   showWarnToast(e.message);
-    // }
+    try {
+      var result = await LoginDao.register(
+        username ?? "",
+        password ?? "",
+        imoocId ?? "",
+        orderId ?? "",
+      );
+      hiPrint(result);
+      if (result['code'] == 0) {
+        // showToast('注册成功');
+        // HiNavigator.getInstance().onJumpTo(RouteStatus.login);
+        hiPrint("注册成功");
+      } else {
+        // showWarnToast(result['msg']);
+        hiPrint(result['msg']);
+      }
+    } on NeedAuth catch (e) {
+      // showWarnToast(e.message);
+      hiPrint(e.message);
+    } on HiNetError catch (e) {
+      // showWarnToast(e.message);
+      hiPrint(e.message);
+    }
   }
 }
