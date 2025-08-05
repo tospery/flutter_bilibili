@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bilibili/db/hi_cache.dart';
+import 'package:flutter_bilibili/http/core/hi_net.dart';
+import 'package:flutter_bilibili/http/request/notice_request.dart';
 import 'http/core/hi_error.dart';
 import 'http/dao/login_dao.dart';
 
@@ -12,13 +15,34 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    return FutureBuilder(
+      future: HiCache.preInit(),
+      builder: (context, snapshot) {
+        // if (snapshot.connectionState == ConnectionState.done) {
+        //   return _buildApp();
+        // } else {
+        //   return const MaterialApp(
+        //     home: Scaffold(
+        //       body: Center(child: CircularProgressIndicator()),
+        //     ),
+        //   );
+        // }
+        return MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          ),
+          home: const MyHomePage(title: 'Flutter Demo Home Page'),
+        );
+      },
     );
+    // return MaterialApp(
+    //   title: 'Flutter Demo',
+    //   theme: ThemeData(
+    //     colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+    //   ),
+    //   home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    // );
   }
 }
 
@@ -33,11 +57,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Future<void> _incrementCounter() async {
-    // TestRequest request = TestRequest();
-    // request.add("aa", "ddd").add("bb", "333").add("requestPrams", "aa111");
     // try {
-    //   var result = await HiNet.getInstance().fire(request);
-    //   print(result);
+    // var result = await HiNet.getInstance().fire(NoticeRequest());
+    // print(result);
     // } on NeedAuth catch (e) {
     //   print(e);
     // } on NeedLogin catch (e) {
@@ -53,8 +75,11 @@ class _MyHomePageState extends State<MyHomePage> {
       //   '123445',
       //   '5566',
       // );
-      var result = await LoginDao.login('jvadd', 'ddd112222');
+      var result = await LoginDao.login('tospery', 'abcd1234');
       print(result);
+
+      var result2 = await HiNet.getInstance().fire(NoticeRequest());
+      print(result2);
     } on NeedAuth catch (e) {
       print(e);
     } on HiNetError catch (e) {
