@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bilibili/http/dao/login_dao.dart';
 import 'package:flutter_bilibili/utils/hi_functions.dart';
+import 'package:flutter_bilibili/widget/app_bar.dart';
+import 'package:flutter_bilibili/widget/login_effect.dart';
 import 'package:flutter_bilibili/widget/login_input.dart';
 // ignore: depend_on_referenced_packages
 
@@ -27,9 +29,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
       //   // context.read<ThemeProvider>().setTheme(ThemeMode.light);
       //   HiNavigator.getInstance().onJumpTo(RouteStatus.login);
       // }),
+      appBar: myappBar("注册", "登录", () {
+        hiPrint("点击了登录");
+      }),
       body: ListView(
         children: [
-          // LoginEffect(protect: protect),
+          LoginEffect(protect: protect),
           LoginInput(
             '用户名',
             '请输入用户名',

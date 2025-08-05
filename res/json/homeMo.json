@@ -1,0 +1,46 @@
+{
+    "bannerList": [
+        {
+            "id": "10",
+            "sticky": 1,
+            "type": "recommend",
+            "title": "好课推荐",
+            "subtitle": "Flutter高级进阶实战 仿哔哩哔哩APP",
+            "url": "https://coding.imooc.com/class/487.html",
+            "cover": "https://szimg.mukewang.com/60497caf0971842912000676.jpg",
+            "createTime": "2021-10-11 10:54:35"
+        }
+    ],
+    "categoryList": [
+        {
+            "name": "推荐",
+            "count": 933
+        }
+    ],
+    "videoList": [
+        {
+            "id": "897",
+            "vid": "BV1H5411V7ki",
+            "title": "迷惑！黑化家族他们又来了！",
+            "tname": "搞笑",
+            "url": "https://o.devio.org/files/video/v=2sIC1sh-yc0.mp4",
+            "cover": "https://o.devio.org/images/fa/photo-1606851282819-76f0b67d5061.webp",
+            "pubdate": 1604658912,
+            "desc": "喜欢我和我的视频 记得关注我的频道！\n点个赞赏、投个硬币、收藏转发~\n都是对我最大的帮助和鼓励！\n在此衷心地感谢大家的支持！",
+            "view": 228474,
+            "duration": 295,
+            "owner": {
+                "name": "半字浅眉-",
+                "face": "https://o.devio.org/images/o_as/avatar/tx5.jpeg",
+                "fans": 1221890284
+            },
+            "reply": 1177,
+            "favorite": 3575,
+            "like": 19143,
+            "coin": 1319,
+            "share": 825,
+            "createTime": "2020-11-14 19:35:53",
+            "size": 17593
+        }
+    ]
+}
