@@ -42,6 +42,10 @@ class _BiliAppState extends State<BiliApp> {
 
 class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<BiliRoutePath> {
+  @override
+  final GlobalKey<NavigatorState> navigatorKey;
+  BiliRouteDelegate() : navigatorKey = GlobalKey<NavigatorState>();
+
   List<MaterialPage> pages = [];
   VideoModel? videoModel;
   RouteStatus _routeStatus = RouteStatus.home;
@@ -109,7 +113,7 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
         },
       ),
       onWillPop: () async =>
-          !(await navigatorKey?.currentState?.maybePop() ?? true),
+          !(await navigatorKey.currentState?.maybePop() ?? false),
     );
   }
 
@@ -124,9 +128,6 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
   }
 
   bool get hasLogin => LoginDao.getBoardingPass() != null;
-
-  @override
-  GlobalKey<NavigatorState>? get navigatorKey => GlobalKey<NavigatorState>();
 
   @override
   Future<void> setNewRoutePath(BiliRoutePath page) async {}
