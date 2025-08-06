@@ -44,7 +44,20 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<BiliRoutePath> {
   @override
   final GlobalKey<NavigatorState> navigatorKey;
-  BiliRouteDelegate() : navigatorKey = GlobalKey<NavigatorState>();
+  BiliRouteDelegate() : navigatorKey = GlobalKey<NavigatorState>() {
+    //实现路由跳转逻辑
+    HiNavigator.getInstance().registerRouteJump(
+      RouteJumpListener(
+        onJumpTo: (RouteStatus routeStatus, {Map? args}) {
+          _routeStatus = routeStatus;
+          if (routeStatus == RouteStatus.detail) {
+            videoModel = args!['video'];
+          }
+          notifyListeners();
+        },
+      ),
+    );
+  }
 
   List<MaterialPage> pages = [];
   VideoModel? videoModel;
@@ -61,31 +74,13 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
     var page;
     if (routeStatus == RouteStatus.home) {
       pages.clear();
-      page = wrapPage(
-        HomePage(
-          onJumpToDetail: (videoModel) {
-            this.videoModel = videoModel;
-            notifyListeners();
-          },
-        ),
-      );
+      page = wrapPage(HomePage());
     } else if (routeStatus == RouteStatus.detail) {
       page = wrapPage(VideoDetailPage(videoModel: videoModel!));
     } else if (routeStatus == RouteStatus.registration) {
       page = wrapPage(RegistrationPage());
     } else if (routeStatus == RouteStatus.login) {
-      page = wrapPage(
-        LoginPage(
-          onSuccess: () {
-            _routeStatus = RouteStatus.home;
-            notifyListeners();
-          },
-          onJumpRegistration: () {
-            _routeStatus = RouteStatus.registration;
-            notifyListeners();
-          },
-        ),
-      );
+      page = wrapPage(LoginPage());
     }
 
     tempPages = [...tempPages, page];

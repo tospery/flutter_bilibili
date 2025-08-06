@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bilibili/http/core/hi_error.dart';
 import 'package:flutter_bilibili/http/dao/login_dao.dart';
+import 'package:flutter_bilibili/navigator/hi_navigator.dart';
 import 'package:flutter_bilibili/utils/hi_functions.dart';
 import 'package:flutter_bilibili/widget/app_bar.dart';
 import 'package:flutter_bilibili/widget/login_button.dart';
@@ -27,12 +28,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: myappBar('注册', '登录', () {
-      //   // context.read<ThemeProvider>().setTheme(ThemeMode.light);
-      //   HiNavigator.getInstance().onJumpTo(RouteStatus.login);
-      // }),
-      appBar: myappBar("注册", "登录", () {
-        hiPrint("点击了登录");
+      appBar: myappBar('注册', '登录', () {
+        // context.read<ThemeProvider>().setTheme(ThemeMode.light);
+        HiNavigator.getInstance().onJumpTo(RouteStatus.login);
       }),
       body: ListView(
         children: [
@@ -145,7 +143,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       hiPrint(result);
       if (result["code"] == 0) {
         showToast("注册成功");
-        // HiNavigator.getInstance().onJumpTo(RouteStatus.login);
+        HiNavigator.getInstance().onJumpTo(RouteStatus.login);
       } else {
         showWarnToast(result["msg"]);
       }
