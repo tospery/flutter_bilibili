@@ -1,4 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Banner;
+import 'package:flutter_bilibili/http/core/hi_error.dart';
+import 'package:flutter_bilibili/http/dao/home_dao.dart';
+import 'package:flutter_bilibili/model/banner.dart';
+import 'package:flutter_bilibili/model/category.dart';
+import 'package:flutter_bilibili/model/home.dart';
 import 'package:flutter_bilibili/model/video_model.dart';
 import 'package:flutter_bilibili/navigator/hi_navigator.dart';
 import 'package:flutter_bilibili/page/home_tab_page.dart';
@@ -17,13 +22,15 @@ class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   // ignore: prefer_typing_uninitialized_variables
   var listener;
-  var tabs = ["推荐", "热门", "追播", "影视", "搞笑", "日常", "综合", "手机游戏", "短片.手书.配音"];
   late TabController _controller;
+  List<Category> categoryList = [];
+  List<Banner> bannerList = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _controller = TabController(length: tabs.length, vsync: this);
+    _controller = TabController(length: categoryList.length, vsync: this);
     HiNavigator.getInstance().addListener(
       listener = (current, pre) {
         hiPrint("home:current -> ${current.page}");
@@ -35,11 +42,13 @@ class _HomePageState extends State<HomePage>
         }
       },
     );
+    loadData();
   }
 
   @override
   void dispose() {
     HiNavigator.getInstance().removeListener(listener);
+    _controller.dispose();
     super.dispose();
   }
 
@@ -57,8 +66,11 @@ class _HomePageState extends State<HomePage>
           Flexible(
             child: TabBarView(
               controller: _controller,
-              children: tabs.map((tab) {
-                return HomeTabPage(name: tab);
+              children: categoryList.map((tab) {
+                return HomeTabPage(
+                  categoryName: tab.name,
+                  bannerList: tab.name == '推荐' ? bannerList : null,
+                );
               }).toList(),
             ),
           ),
@@ -80,14 +92,39 @@ class _HomePageState extends State<HomePage>
         borderSide: BorderSide(color: primary, width: 3),
         insets: EdgeInsets.only(left: 15, right: 15),
       ),
-      tabs: tabs.map((tab) {
+      tabs: categoryList.map((tab) {
         return Tab(
           child: Padding(
             padding: EdgeInsets.only(left: 5, right: 5),
-            child: Text(tab),
+            child: Text(tab.name),
           ),
         );
       }).toList(),
     );
   }
+
+  void loadData() async {
+    try {
+      Home result = await HomeDao.get('推荐');
+      hiPrint('loadData():$result');
+      _controller =
+          TabController(length: result.categoryList.length, vsync: this);
+      setState(() {
+        categoryList = result.categoryList;
+        bannerList = result.bannerList;
+        _isLoading = false;
+      });
+    } on NeedAuth catch (e) {
+      hiPrint(e);
+      setState(() {
+        _isLoading = false;
+      });
+    } on HiNetError catch (e) {
+      hiPrint(e);
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
 }
