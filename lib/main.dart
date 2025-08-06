@@ -84,7 +84,9 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
     }
 
     tempPages = [...tempPages, page];
+    HiNavigator.getInstance().notify(tempPages, pages);
     pages = tempPages;
+    // ignore: deprecated_member_use
     return WillPopScope(
       child: Navigator(
         key: navigatorKey,
@@ -103,7 +105,9 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
           if (!route.didPop(result)) {
             return false;
           }
+          var tempPages = [...pages];
           pages.removeLast();
+          HiNavigator.getInstance().notify(pages, tempPages);
           return true;
         },
       ),

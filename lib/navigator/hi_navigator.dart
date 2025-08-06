@@ -3,6 +3,10 @@ import 'package:flutter_bilibili/page/home_page.dart';
 import 'package:flutter_bilibili/page/login_page.dart';
 import 'package:flutter_bilibili/page/registration_page.dart';
 import 'package:flutter_bilibili/page/video_detail_page.dart';
+import 'package:flutter_bilibili/utils/hi_functions.dart';
+
+typedef RouteChangeListener =
+    Function(RouteStatusInfo current, RouteStatusInfo? pre);
 
 wrapPage(Widget child) {
   return MaterialPage(key: ValueKey(child.hashCode), child: child);
@@ -55,6 +59,8 @@ abstract class _RouteJumpListener {
 
 class HiNavigator extends _RouteJumpListener {
   RouteJumpListener? _routeJump;
+  final List<RouteChangeListener> _listeners = [];
+  RouteStatusInfo? _current;
 
   static HiNavigator? _instance;
 
@@ -72,5 +78,38 @@ class HiNavigator extends _RouteJumpListener {
   @override
   void onJumpTo(RouteStatus routeStatus, {Map? args}) {
     _routeJump?.onJumpTo(routeStatus, args: args);
+  }
+
+  void addListener(RouteChangeListener listener) {
+    if (!_listeners.contains(listener)) {
+      _listeners.add(listener);
+    }
+  }
+
+  void removeListener(RouteChangeListener listener) {
+    _listeners.remove(listener);
+  }
+
+  void notify(List<MaterialPage> currentPages, List<MaterialPage> prePages) {
+    if (currentPages == prePages) return;
+    var current = RouteStatusInfo(
+      getStatus(currentPages.last),
+      currentPages.last.child,
+    );
+    _notify(current);
+  }
+
+  void _notify(RouteStatusInfo current) {
+    // if (current.page is BottomNavigator && _bottomTab != null) {
+    //   //如果打开的是首页，则明确到首页具体的tab
+    //   current = _bottomTab!;
+    // }
+
+    hiPrint('current: ${current.page}', tag: 'hi_navigator');
+    hiPrint('pre: ${_current?.page}', tag: 'hi_navigator');
+    for (var listener in _listeners) {
+      listener(current, _current);
+    }
+    _current = current;
   }
 }
