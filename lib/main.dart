@@ -8,6 +8,7 @@ import 'package:flutter_bilibili/page/login_page.dart';
 import 'package:flutter_bilibili/page/registration_page.dart';
 import 'package:flutter_bilibili/page/video_detail_page.dart';
 import 'package:flutter_bilibili/utils/color.dart';
+import 'package:flutter_bilibili/utils/hi_functions.dart';
 
 void main() {
   runApp(const BiliApp());
@@ -69,21 +70,46 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
     } else if (routeStatus == RouteStatus.registration) {
       page = wrapPage(RegistrationPage());
     } else if (routeStatus == RouteStatus.login) {
-      page = wrapPage(LoginPage());
+      page = wrapPage(
+        LoginPage(
+          onSuccess: () {
+            _routeStatus = RouteStatus.home;
+            notifyListeners();
+          },
+          onJumpRegistration: () {
+            _routeStatus = RouteStatus.registration;
+            notifyListeners();
+          },
+        ),
+      );
     }
 
     tempPages = [...tempPages, page];
     pages = tempPages;
-    return Navigator(
-      key: navigatorKey,
-      pages: pages,
-      // ignore: deprecated_member_use
-      onPopPage: (route, result) {
-        if (!route.didPop(result)) {
-          return false;
-        }
-        return true;
-      },
+    return WillPopScope(
+      child: Navigator(
+        key: navigatorKey,
+        pages: pages,
+        // ignore: deprecated_member_use
+        onPopPage: (route, result) {
+          if (route.settings is MaterialPage) {
+            //登录页未登录返回拦截
+            if ((route.settings as MaterialPage).child is LoginPage) {
+              if (!hasLogin) {
+                showWarnToast('请先登录');
+                return false;
+              }
+            }
+          }
+          if (!route.didPop(result)) {
+            return false;
+          }
+          pages.removeLast();
+          return true;
+        },
+      ),
+      onWillPop: () async =>
+          !(await navigatorKey?.currentState?.maybePop() ?? true),
     );
   }
 
