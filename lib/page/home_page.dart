@@ -10,7 +10,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   // ignore: prefer_typing_uninitialized_variables
   var listener;
 
@@ -19,6 +19,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     HiNavigator.getInstance().addListener(
       listener = (current, pre) {
+        hiPrint("home:current -> ${current.page}");
+        hiPrint("home:pre -> ${pre.page}");
         if (widget == current.page || current.page is HomePage) {
           hiPrint('打开了首页:onResume');
         } else if (widget == pre?.page || pre?.page is HomePage) {
@@ -36,6 +38,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(),
       body: Column(
@@ -55,4 +58,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
