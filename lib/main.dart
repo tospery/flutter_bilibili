@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bilibili/db/hi_cache.dart';
 import 'package:flutter_bilibili/http/dao/login_dao.dart';
 import 'package:flutter_bilibili/model/video_model.dart';
+import 'package:flutter_bilibili/navigator/bottom_navigator.dart';
 import 'package:flutter_bilibili/navigator/hi_navigator.dart';
 import 'package:flutter_bilibili/page/home_page.dart';
 import 'package:flutter_bilibili/page/login_page.dart';
@@ -74,7 +75,7 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
     var page;
     if (routeStatus == RouteStatus.home) {
       pages.clear();
-      page = wrapPage(HomePage());
+      page = wrapPage(BottomNavigator());
     } else if (routeStatus == RouteStatus.detail) {
       page = wrapPage(VideoDetailPage(videoModel: videoModel!));
     } else if (routeStatus == RouteStatus.registration) {
