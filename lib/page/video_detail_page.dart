@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bilibili/model/video_model.dart';
+import 'package:flutter_bilibili/model/video.dart';
 
 class VideoDetailPage extends StatefulWidget {
-  final VideoModel videoModel;
-  const VideoDetailPage({super.key, required this.videoModel});
+  final Video video;
+  const VideoDetailPage({super.key, required this.video});
 
   @override
   State<VideoDetailPage> createState() => _VideoDetailPageState();
@@ -15,7 +15,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
     return Scaffold(
       appBar: AppBar(),
       body: Text(
-        '视频 ID: ${widget.videoModel.vid}',
+        '视频 ID: ${widget.video.vid}',
         style: const TextStyle(fontSize: 24),
       ),
     );
