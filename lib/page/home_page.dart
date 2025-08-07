@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart' hide Banner;
+import 'package:flutter_bilibili/core/hi_state.dart';
 import 'package:flutter_bilibili/http/core/hi_error.dart';
 import 'package:flutter_bilibili/http/dao/home_dao.dart';
 import 'package:flutter_bilibili/model/banner.dart';
 import 'package:flutter_bilibili/model/category.dart';
 import 'package:flutter_bilibili/model/home.dart';
-import 'package:flutter_bilibili/model/video_model.dart';
 import 'package:flutter_bilibili/navigator/hi_navigator.dart';
 import 'package:flutter_bilibili/page/home_tab_page.dart';
 import 'package:flutter_bilibili/utils/color.dart';
@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
+class _HomePageState extends HiState<HomePage>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   // ignore: prefer_typing_uninitialized_variables
   var listener;
