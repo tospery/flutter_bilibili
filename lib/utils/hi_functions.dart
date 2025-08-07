@@ -1,6 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bilibili/navigator/hi_navigator.dart';
+import 'package:flutter_bilibili/page/profile_page.dart';
+import 'package:flutter_bilibili/page/video_detail_page.dart';
+import 'package:flutter_bilibili/provider/theme_provider.dart';
+import 'package:flutter_bilibili/utils/color.dart';
+import 'package:flutter_bilibili/utils/hi_types.dart';
+import 'package:flutter_bilibili/widget/navigation_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 void hiPrint(log, {String? tag}) {
   if (kDebugMode) {
@@ -29,46 +40,46 @@ void showToast(String text) {
   );
 }
 
-// void changeStatusBar({
-//   color = Colors.white,
-//   StatusStyle statusStyle = StatusStyle.dark,
-//   BuildContext? context,
-// }) {
-//   if (context != null) {
-//     //fix Tried to listen to a value exposed with provider, from outside of the widget tree.
-//     var themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-//     if (themeProvider.isDark()) {
-//       statusStyle = StatusStyle.light;
-//       color = HiColor.darkBg;
-//     }
-//   }
-//   var page = HiNavigator.getInstance().getCurrent()?.page;
-//   //fix Android切换 profile页面状态栏变白问题
-//   if (page is ProfilePage) {
-//     color = Colors.transparent;
-//   } else if (page is VideoDetailPage) {
-//     color = Colors.black;
-//     statusStyle = StatusStyle.light;
-//   }
-//   //沉浸式状态栏样式
-//   Brightness brightness;
-//   if (Platform.isIOS) {
-//     brightness = statusStyle == StatusStyle.light
-//         ? Brightness.dark
-//         : Brightness.light;
-//   } else {
-//     brightness = statusStyle == StatusStyle.light
-//         ? Brightness.light
-//         : Brightness.dark;
-//   }
-//   SystemChrome.setSystemUIOverlayStyle(
-//     SystemUiOverlayStyle.light.copyWith(
-//       statusBarColor: Colors.transparent,
-//       statusBarBrightness: brightness,
-//       statusBarIconBrightness: brightness,
-//     ),
-//   );
-// }
+void changeStatusBar({
+  color = Colors.white,
+  StatusStyle statusStyle = StatusStyle.dark,
+  BuildContext? context,
+}) {
+  if (context != null) {
+    //fix Tried to listen to a value exposed with provider, from outside of the widget tree.
+    var themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    if (themeProvider.isDark()) {
+      statusStyle = StatusStyle.light;
+      color = HiColor.darkBg;
+    }
+  }
+  var page = HiNavigator.getInstance().getCurrent()?.page;
+  //fix Android切换 profile页面状态栏变白问题
+  if (page is ProfilePage) {
+    color = Colors.transparent;
+  } else if (page is VideoDetailPage) {
+    color = Colors.black;
+    statusStyle = StatusStyle.light;
+  }
+  //沉浸式状态栏样式
+  Brightness brightness;
+  if (Platform.isIOS) {
+    brightness = statusStyle == StatusStyle.light
+        ? Brightness.dark
+        : Brightness.light;
+  } else {
+    brightness = statusStyle == StatusStyle.light
+        ? Brightness.light
+        : Brightness.dark;
+  }
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle.light.copyWith(
+      statusBarColor: Colors.transparent,
+      statusBarBrightness: brightness,
+      statusBarIconBrightness: brightness,
+    ),
+  );
+}
 
 String durationTransform(int seconds) {
   int m = (seconds / 60).truncate();

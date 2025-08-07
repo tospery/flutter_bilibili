@@ -9,6 +9,7 @@ import 'package:flutter_bilibili/navigator/hi_navigator.dart';
 import 'package:flutter_bilibili/page/home_tab_page.dart';
 import 'package:flutter_bilibili/utils/color.dart';
 import 'package:flutter_bilibili/utils/hi_functions.dart';
+import 'package:flutter_bilibili/widget/navigation_bar.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
 class HomePage extends StatefulWidget {
@@ -58,6 +59,12 @@ class _HomePageState extends HiState<HomePage>
     return Scaffold(
       body: Column(
         children: [
+          NavigationBarPlus(
+            height: 50,
+            child: _appBar(),
+            color: Colors.white,
+            statusStyle: StatusStyle.dark,
+          ),
           Container(
             color: Colors.white,
             padding: EdgeInsets.only(top: 30),
@@ -125,6 +132,65 @@ class _HomePageState extends HiState<HomePage>
         _isLoading = false;
       });
     }
+  }
+
+  _appBar() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 15, right: 15),
+      child: Row(
+        children: [
+          InkWell(
+            onTap: () {
+              // if (widget.onJumpTo != null) {
+              //   widget.onJumpTo!(3);
+              // }
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(23),
+              child: const Image(
+                height: 46,
+                width: 46,
+                image: AssetImage('res/image/avatar.png'),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  height: 32,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(color: Colors.grey[100]),
+                  child: const Icon(
+                    Icons.search,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              // _mockCrash();
+            },
+            child: const Icon(
+              Icons.explore_outlined,
+              color: Colors.grey,
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Icon(
+              Icons.mail_outline,
+              color: Colors.grey,
+            ),
+          )
+        ],
+      ),
+    );
   }
 
 }

@@ -72,6 +72,10 @@ class HiNavigator extends _RouteJumpListener {
 
   HiNavigator._();
 
+  RouteStatusInfo? getCurrent() {
+    return _current;
+  }
+
   void onBottomTabChange(int index, Widget page) {
     _bottomTab = RouteStatusInfo(RouteStatus.home, page);
     _notify(_bottomTab!);
